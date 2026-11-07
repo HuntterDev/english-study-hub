@@ -1,0 +1,3422 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Study Hub - Plano de Estudos Gratuito</title>
+    <style>
+        /* ===== CSS VARIABLES FOR THEMING ===== */
+        :root {
+            /* Light theme (default) */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --bg-tertiary: #e9ecef;
+            --bg-card: #ffffff;
+            --text-primary: #212529;
+            --text-secondary: #495057;
+            --text-muted: #6c757d;
+            --border-color: #dee2e6;
+            --shadow-color: rgba(0,0,0,0.1);
+            --shadow-hover: rgba(0,0,0,0.15);
+            --accent-primary: #667eea;
+            --accent-secondary: #764ba2;
+            --accent-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --info: #17a2b8;
+            --header-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --tab-bg: #f8f9fa;
+            --tab-border: #e9ecef;
+            --input-bg: #ffffff;
+            --input-border: #ced4da;
+            --modal-bg: #ffffff;
+            --scrollbar-track: #f1f1f1;
+            --scrollbar-thumb: #c1c1c1;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #1a1a2e;
+            --bg-secondary: #16213e;
+            --bg-tertiary: #0f3460;
+            --bg-card: #16213e;
+            --text-primary: #eaeaea;
+            --text-secondary: #b0b0b0;
+            --text-muted: #888888;
+            --border-color: #2a2a4a;
+            --shadow-color: rgba(0,0,0,0.3);
+            --shadow-hover: rgba(0,0,0,0.5);
+            --accent-primary: #8b9fff;
+            --accent-secondary: #a890e0;
+            --accent-gradient: linear-gradient(135deg, #8b9fff 0%, #a890e0 100%);
+            --success: #4ade80;
+            --warning: #fbbf24;
+            --danger: #f87171;
+            --info: #22d3ee;
+            --header-bg: linear-gradient(135deg, #16213e 0%, #0f3460 100%);
+            --tab-bg: #16213e;
+            --tab-border: #2a2a4a;
+            --input-bg: #1a1a2e;
+            --input-border: #3a3a5a;
+            --modal-bg: #16213e;
+            --scrollbar-track: #1a1a2e;
+            --scrollbar-thumb: #3a3a5a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--header-bg);
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--text-primary);
+            transition: background 0.3s, color 0.3s;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: var(--bg-primary);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px var(--shadow-color);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: calc(100vh - 40px);
+        }
+
+        /* ===== PERSISTENT TOP BAR ===== */
+        .top-bar {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            flex-wrap: wrap;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px var(--shadow-color);
+        }
+        .top-bar-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .top-bar-brand {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .top-bar-stats {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: var(--bg-tertiary);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            transition: all 0.2s;
+        }
+        .stat-item:hover {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+        }
+        .stat-icon {
+            font-size: 1rem;
+        }
+        .stat-value {
+            color: var(--text-primary);
+        }
+        .stat-label {
+            color: var(--text-muted);
+            font-weight: 400;
+            font-size: 0.75rem;
+        }
+
+        .top-bar-alerts {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            background: var(--warning);
+            color: #1a1a1a;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            max-width: 300px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .top-bar-alerts.hidden {
+            display: none;
+        }
+        .alert-icon {
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+        .top-bar-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .phase-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+        .phase-badge:hover {
+            transform: scale(1.05);
+            border-color: var(--border-color);
+        }
+        .phase-badge.early { background: #e8f5e9; color: #28a745; border-color: #28a745; }
+        .phase-badge.mid { background: #fff8e1; color: #856404; border-color: #ffc107; }
+        .phase-badge.end { background: #eef0f7; color: #667eea; border-color: #667eea; }
+        .phase-badge.master { background: #e8f5e9; color: #28a745; border-color: #28a745; }
+        [data-theme="dark"] .phase-badge.early { background: #1a3a2a; color: #4ade80; border-color: #4ade80; }
+        [data-theme="dark"] .phase-badge.mid { background: #3a351a; color: #fbbf24; border-color: #fbbf24; }
+        [data-theme="dark"] .phase-badge.end { background: #1a1f3a; color: #8b9fff; border-color: #8b9fff; }
+        [data-theme="dark"] .phase-badge.master { background: #1a3a2a; color: #4ade80; border-color: #4ade80; }
+
+        .theme-toggle {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            transition: all 0.2s;
+        }
+        .theme-toggle:hover {
+            background: var(--accent-primary);
+            color: white;
+            border-color: var(--accent-primary);
+            transform: rotate(15deg);
+        }
+
+        header {
+            background: var(--header-bg);
+            color: white;
+            padding: 30px 40px;
+            text-align: center;
+        }
+        header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 8px;
+        }
+        header p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        .nav-tabs {
+            display: flex;
+            background: var(--tab-bg);
+            border-bottom: 2px solid var(--tab-border);
+            overflow-x: auto;
+            flex-shrink: 0;
+        }
+        .nav-tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #6c757d;
+            transition: all 0.3s;
+            white-space: nowrap;
+            border-bottom: 3px solid transparent;
+        }
+        .nav-tab:hover {
+            color: #667eea;
+            background: #eef0f7;
+        }
+        .nav-tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+            background: white;
+        }
+        .tab-content {
+            display: none;
+            padding: 30px;
+            animation: fadeIn 0.3s ease;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        .section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e9ecef;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section h2::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 2px;
+        }
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            border: 1px solid #e9ecef;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.15);
+        }
+        .card h3 {
+            color: #667eea;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .card p {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        .btn-secondary {
+            background: #e9ecef;
+            color: #495057;
+        }
+        .btn-secondary:hover {
+            background: #dee2e6;
+        }
+        .btn-copy {
+            background: #28a745;
+            color: white;
+            font-size: 0.8rem;
+            padding: 6px 12px;
+        }
+        .btn-copy:hover {
+            background: #218838;
+        }
+        .btn-copy.copied {
+            background: #17a2b8;
+        }
+        .prompt-box {
+            background: #1e1e1e;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            position: relative;
+            overflow-x: auto;
+        }
+        .prompt-box code {
+            color: #d4d4d4;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            display: block;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .prompt-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .prompt-label {
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .week-day {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+        }
+        .week-day h3 {
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .week-day .day-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .activity-list {
+            list-style: none;
+        }
+        .activity-list li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+            border-bottom: 1px solid #f0f0f0;
+            line-height: 1.5;
+        }
+        .activity-list li:last-child {
+            border-bottom: none;
+        }
+        .activity-list li::before {
+            content: '▶';
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-size: 0.7rem;
+        }
+        .audio-text {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            font-style: italic;
+            color: #856404;
+        }
+        .tts-instruction {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .tts-instruction strong {
+            color: #155724;
+        }
+        .progress-bar {
+            background: #e9ecef;
+            border-radius: 10px;
+            height: 8px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+        .checklist {
+            list-style: none;
+        }
+        .checklist li {
+            padding: 8px 0;
+            padding-left: 30px;
+            position: relative;
+            cursor: pointer;
+        }
+        .checklist li::before {
+            content: '☐';
+            position: absolute;
+            left: 0;
+            font-size: 1.2rem;
+            color: #6c757d;
+            transition: color 0.2s;
+        }
+        .checklist li.done::before {
+            content: '☑';
+            color: #28a745;
+        }
+        .resource-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: background 0.2s;
+            margin: 5px 5px 5px 0;
+        }
+        .resource-link:hover {
+            background: #eef0f7;
+        }
+        .resource-link:visited {
+            color: #764ba2;
+        }
+        .icon {
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        @media (max-width: 768px) {
+            .container { border-radius: 0; }
+            header { padding: 25px 20px; }
+            header h1 { font-size: 1.8rem; }
+            .tab-content { padding: 20px; }
+            .nav-tab { padding: 12px 15px; font-size: 0.85rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- PERSISTENT TOP BAR -->
+        <div class="top-bar" id="topBar">
+            <div class="top-bar-left">
+                <div class="top-bar-brand">🎯 English Study Hub</div>
+                <div class="top-bar-stats" id="topBarStats">
+                    <div class="stat-item" title="Dias consecutivos estudando">
+                        <span class="stat-icon">🔥</span>
+                        <span class="stat-value" id="stat-streak">0</span>
+                        <span class="stat-label">Streak</span>
+                    </div>
+                    <div class="stat-item" title="XP total desta semana">
+                        <span class="stat-icon">⚡</span>
+                        <span class="stat-value" id="stat-xp">0</span>
+                        <span class="stat-label">XP</span>
+                    </div>
+                    <div class="stat-item" title="Nível atual baseado no XP">
+                        <span class="stat-icon">🏅</span>
+                        <span class="stat-value" id="stat-level">1</span>
+                        <span class="stat-label">Nível</span>
+                    </div>
+                </div>
+                <div class="top-bar-alerts hidden" id="topBarAlerts">
+                    <span class="alert-icon">⚠️</span>
+                    <span id="alert-text">Carregando alertas...</span>
+                </div>
+            </div>
+            <div class="top-bar-right">
+                <div class="phase-badge early" id="phaseBadge" title="Clique para ir à Progressão RPG" onclick="switchTab('rpg')" style="cursor: pointer;">
+                    <span id="phaseIcon">🌱</span>
+                    <span id="phaseText">Early Game</span>
+                </div>
+                <button class="theme-toggle" id="themeToggle" title="Alternar Tema Escuro/Claro" aria-label="Alternar tema">
+                    <span id="themeIcon">🌙</span>
+                </button>
+            </div>
+        </div>
+
+        <header>
+            <h1>🎯 English Study Hub</h1>
+            <p>Plano de Estudos 100% Gratuito • 100% PC • Organizado por IA</p>
+        </header>
+
+        <nav class="nav-tabs" id="navTabs">
+            <button class="nav-tab active" data-tab="command">🎯 Command Center</button>
+            <button class="nav-tab" data-tab="dashboard">📊 Dashboard</button>
+            <button class="nav-tab" data-tab="tools">🛠️ Ferramentas</button>
+            <button class="nav-tab" data-tab="weekly">📅 Plano Semanal</button>
+            <button class="nav-tab" data-tab="prompts">💬 Prompts Prontos</button>
+            <button class="nav-tab" data-tab="audio">🎵 Kit de Áudios</button>
+            <button class="nav-tab" data-tab="progress">📈 Progresso</button>
+            <button class="nav-tab" data-tab="rpg">🎮 Progressão RPG</button>
+            <button class="nav-tab" data-tab="logs">📜 Galeria/Log</button>
+            <button class="nav-tab" data-tab="tips">💡 Dicas PC</button>
+        </nav>
+
+        <!-- COMMAND CENTER -->
+        <div class="tab-content active" id="tab-command">
+            <div class="section">
+                <h2>🎯 Command Center — Visão Unificada</h2>
+                <p style="margin-bottom: 20px; color: var(--text-muted);">Seu painel de controle central. Progresso global, próxima ação, status por área e alertas.</p>
+
+                <!-- Global Progress -->
+                <div class="card" style="background: var(--accent-gradient); color: white; border-radius: 16px; padding: 24px; margin-bottom: 24px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 16px;">
+                        <div>
+                            <div style="font-size: 0.9rem; opacity: 0.9;">Progresso Global da Semana</div>
+                            <div style="font-size: 2rem; font-weight: 800;" id="global-progress-text">0%</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 0.9rem; opacity: 0.9;">Fase RPG Atual</div>
+                            <div style="font-size: 1.5rem; font-weight: 700;" id="global-phase-text">🌱 Early Game</div>
+                        </div>
+                    </div>
+                    <div class="progress-bar" style="background: rgba(255,255,255,0.3); height: 12px; border-radius: 6px;">
+                        <div class="progress-fill" id="global-progress-bar" style="width: 0%; background: white; height: 100%; border-radius: 6px; transition: width 0.5s ease;"></div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 8px; font-size: 0.85rem; opacity: 0.9;">
+                        <span id="global-progress-detail">0 de 35 tarefas concluídas</span>
+                        <span id="global-week-info">Semana <span id="current-week-num">1</span></span>
+                    </div>
+                </div>
+
+                <!-- Next Action -->
+                <div class="card" style="border-left: 4px solid var(--accent-primary); margin-bottom: 24px;">
+                    <h3 style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px; color: var(--accent-primary);">
+                        <span style="font-size: 1.5rem;">🎯</span>
+                        Próxima Ação Recomendada
+                    </h3>
+                    <div id="next-action-card" style="padding: 16px; background: var(--bg-secondary); border-radius: 10px; border: 1px solid var(--border-color);">
+                        <div style="font-size: 1.1rem; font-weight: 600; margin-bottom: 8px;" id="next-action-title">Carregando...</div>
+                        <div style="color: var(--text-secondary); margin-bottom: 16px;" id="next-action-desc">Analisando seu progresso...</div>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;" id="next-action-buttons">
+                            <!-- Botões dinâmicos -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Area Status Cards -->
+                <div class="section">
+                    <h2>📊 Status por Área</h2>
+                    <div class="card-grid" id="area-status-grid">
+                        <!-- Preenchido via JS -->
+                    </div>
+                </div>
+
+                <!-- Quick Stats Row -->
+                <div class="card-grid" style="margin-top: 20px;">
+                    <div class="card">
+                        <h3>📅 Esta Semana</h3>
+                        <div id="week-quick-stats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px;">
+                            <div style="text-align: center; padding: 12px; background: var(--bg-secondary); border-radius: 8px;">
+                                <div style="font-size: 1.5rem; font-weight: 700; color: var(--accent-primary);" id="stat-week-listening">0</div>
+                                <div style="font-size: 0.75rem; color: var(--text-muted);">Min Listening</div>
+                            </div>
+                            <div style="text-align: center; padding: 12px; background: var(--bg-secondary); border-radius: 8px;">
+                                <div style="font-size: 1.5rem; font-weight: 700; color: var(--success);" id="stat-week-speaking">0</div>
+                                <div style="font-size: 0.75rem; color: var(--text-muted);">Min Speaking</div>
+                            </div>
+                            <div style="text-align: center; padding: 12px; background: var(--bg-secondary); border-radius: 8px;">
+                                <div style="font-size: 1.5rem; font-weight: 700; color: var(--info);" id="stat-week-anki">0</div>
+                                <div style="font-size: 0.75rem; color: var(--text-muted);">Cards Anki</div>
+                            </div>
+                            <div style="text-align: center; padding: 12px; background: var(--bg-secondary); border-radius: 8px;">
+                                <div style="font-size: 1.5rem; font-weight: 700; color: var(--warning);" id="stat-week-writing">0</div>
+                                <div style="font-size: 0.75rem; color: var(--text-muted);">Textos</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3>🎯 Próximos Gates</h3>
+                        <div id="upcoming-gates" style="display: flex; flex-direction: column; gap: 10px;">
+                            <!-- Preenchido via JS -->
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3>⚠️ Alertas Ativos</h3>
+                        <div id="active-alerts-list" style="display: flex; flex-direction: column; gap: 8px;">
+                            <!-- Preenchido via JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DASHBOARD -->
+        <div class="tab-content" id="tab-dashboard">
+            <div class="section">
+                <h2>🎯 Visão Rápida</h2>
+                <div class="card-grid">
+                    <div class="card">
+                        <h3>⏱️ Tempo Diário</h3>
+                        <p>Recomendado: <strong>45-60 minutos/dia</strong> (pode dividir em 2 blocos de 25 min)</p>
+                        <div class="progress-bar"><div class="progress-fill" style="width: 75%"></div></div>
+                        <small>Meta semanal: 5h15min</small>
+                    </div>
+                    <div class="card">
+                        <h3>🎯 Foco Principal</h3>
+                        <p>Listening + Speaking + Gramática + Vocabulário (rotação semanal)</p>
+                    </div>
+                    <div class="card">
+                        <h3>💰 Custo Total</h3>
+                        <p style="font-size: 1.5rem; color: #28a745; font-weight: bold;">R$ 0,00</p>
+                        <small>Todas ferramentas são gratuitas</small>
+                    </div>
+                    <div class="card">
+                        <h3>🖥️ 100% Desktop</h3>
+                        <p>Funciona totalmente no navegador do PC. Não precisa de celular.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🚀 Comece Agora - 3 Passos</h2>
+                <div class="card-grid">
+                    <div class="card">
+                        <h3>1️⃣ Abra as IAs Principais</h3>
+                        <p>Mantenha estas abas abertas no navegador:</p>
+                        <a href="https://chat.openai.com" target="_blank" class="resource-link">🤖 ChatGPT (gratuito)</a>
+                        <a href="https://gemini.google.com" target="_blank" class="resource-link">💎 Gemini (gratuito)</a>
+                        <a href="https://ttsmaker.com" target="_blank" class="resource-link">🔊 TTS Maker (áudio)</a>
+                    </div>
+                    <div class="card">
+                        <h3>2️⃣ Instale Extensões Úteis</h3>
+                        <p>No Chrome/Edge/Brave:</p>
+                        <a href="https://languagetool.org" target="_blank" class="resource-link">📝 LanguageTool</a>
+                        <a href="https://ankiweb.net" target="_blank" class="resource-link">🃏 AnkiWeb (web)</a>
+                    </div>
+                    <div class="card">
+                        <h3>3️⃣ Escolha o Dia de Hoje</h3>
+                        <p>Vá na aba <strong>"📅 Plano Semanal"</strong> e siga as atividades do dia atual.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>📌 Links Rápidos Essenciais</h2>
+                <div class="card-grid">
+                    <div class="card">
+                        <h3>🎧 Listening Estruturado</h3>
+                        <a href="https://www.bbclearningenglish.com" target="_blank" class="resource-link">BBC Learning English</a>
+                        <a href="https://learningenglish.voanews.com" target="_blank" class="resource-link">VOA Learning English</a>
+                        <a href="https://www.bbc.co.uk/learningenglish/english/features/6-minute-english" target="_blank" class="resource-link">6 Minute English</a>
+                    </div>
+                    <div class="card">
+                        <h3>📚 Leitura Nível Adaptado</h3>
+                        <a href="https://www.newsinlevels.com" target="_blank" class="resource-link">News in Levels</a>
+                        <a href="https://learnenglish.britishcouncil.org/skills/reading" target="_blank" class="resource-link">British Council Reading</a>
+                    </div>
+                    <div class="card">
+                        <h3>🗣️ Pronúncia</h3>
+                        <a href="https://forvo.com" target="_blank" class="resource-link">Forvo (pronúncia nativa)</a>
+                        <a href="https://www.rachelsenglish.com" target="_blank" class="resource-link">Rachel's English (YouTube)</a>
+                    </div>
+                    <div class="card">
+                        <h3>🔍 Tradução — Estratégia Híbrida (Qualidade + Volume)</h3>
+                        <div style="display: flex; flex-direction: column; gap: 12px;">
+                            <!-- DeepL - Principal -->
+                            <div style="background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); border: 2px solid #667eea; border-radius: 10px; padding: 16px;">
+                                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                    <span style="font-size: 1.5rem;">🥇</span>
+                                    <strong style="color: #667eea; font-size: 1.1rem;">DeepL Translator — Qualidade Máxima</strong>
+                                    <span style="background: #667eea; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem;">PRIMÁRIO</span>
+                                </div>
+                                <p style="color: #555; margin: 0 0 8px 32px; font-size: 0.9rem;">Melhor para PT↔EN: frases naturais, registro formal/informal, expressões idiomáticas, termos técnicos.</p>
+                                <div style="display: flex; align-items: center; gap: 8px; margin-left: 32px; flex-wrap: wrap;">
+                                    <span style="background: #fff3cd; color: #856404; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600;">⚠️ Limite: ~5.000 chars/mês (grátis)</span>
+                                    <a href="https://www.deepl.com/translator" target="_blank" class="btn btn-primary" style="padding: 8px 16px; font-size: 0.85rem;">Abrir DeepL</a>
+                                </div>
+                            </div>
+
+                            <!-- Seta de fallback -->
+                            <div style="text-align: center; color: #6c757d; font-size: 1.5rem; padding: 4px 0;">
+                                ⬇️ <em style="font-size: 0.7rem;">Cota esgotou? Precisa de volume/idiomas raros?</em> ⬇️
+                            </div>
+
+                            <!-- Google Translate - Fallback -->
+                            <div style="background: linear-gradient(135deg, #4285f415 0%, #34a85315 100%); border: 2px solid #4285f4; border-radius: 10px; padding: 16px;">
+                                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                    <span style="font-size: 1.5rem;">🔄</span>
+                                    <strong style="color: #4285f4; font-size: 1.1rem;">Google Translate — Volume Ilimitado</strong>
+                                    <span style="background: #4285f4; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem;">FALLBACK</span>
+                                </div>
+                                <p style="color: #555; margin: 0 0 8px 32px; font-size: 0.9rem;">Sem limite de caracteres, 130+ idiomas, traduz sites inteiros, OCR/câmera (mobile), integração Chrome nativa.</p>
+                                <div style="display: flex; align-items: center; gap: 8px; margin-left: 32px; flex-wrap: wrap;">
+                                    <span style="background: #d4edda; color: #155724; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600;">✅ Ilimitado grátis</span>
+                                    <a href="https://translate.google.com" target="_blank" class="btn btn-secondary" style="padding: 8px 16px; font-size: 0.85rem; background: #4285f4; color: white;">Abrir Google Translate</a>
+                                </div>
+                            </div>
+
+                            <!-- Reverso Context - Complementar -->
+                            <div style="background: #f8f9fa; border: 1px dashed #dee2e6; border-radius: 10px; padding: 12px;">
+                                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                                    <span style="font-size: 1.2rem;">📚</span>
+                                    <strong style="color: #495057;">Reverso Context — Exemplos Reais de Uso</strong>
+                                    <span style="background: #6c757d; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.65rem;">COMPLEMENTAR</span>
+                                </div>
+                                <p style="color: #555; margin: 0 0 8px 30px; font-size: 0.85rem;">Não traduz frase inteira — mostra <strong>como a palavra/frase é usada em contexto real</strong> (legendas, artigos, documentos bilíngues).</p>
+                                <a href="https://context.reverso.net/traducao/portugues-ingles" target="_blank" class="resource-link" style="margin-left: 30px;">Abrir Reverso Context</a>
+                            </div>
+
+                            <!-- Dica visual rápida -->
+                            <div style="background: #eef0f7; border-left: 4px solid #667eea; border-radius: 0 8px 8px 0; padding: 12px; font-size: 0.85rem;">
+                                <strong>💡 Regra prática:</strong>
+                                <ul style="margin: 8px 0 0 20px; padding: 0; color: #555;">
+                                    <li>Seu writing, emails, artigos de estudo, legendas → <strong>DeepL primeiro</strong></li>
+                                    <li>Cota acabou / leitura rápida / site inteiro / idioma raro → <strong>Google Translate</strong></li>
+                                    <li>Dúvida sobre como usar uma palavra → <strong>Reverso Context</strong></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FERRAMENTAS -->
+        <div class="tab-content" id="tab-tools">
+            <div class="section">
+                <h2>🤖 IAs de Conversação & Correção (Gratuitas)</h2>
+                <div class="card-grid">
+                    <div class="card">
+                        <h3>🤖 ChatGPT Free</h3>
+                        <p>Conversação por texto/voz, correção, exercícios, explicações. Use o modo Voice no site/app.</p>
+                        <a href="https://chat.openai.com" target="_blank" class="btn btn-primary">Abrir ChatGPT</a>
+                    </div>
+                    <div class="card">
+                        <h3>💎 Google Gemini</h3>
+                        <p>Alternativa forte, bom para raciocínio e também tem modo de voz (Gemini Live).</p>
+                        <a href="https://gemini.google.com" target="_blank" class="btn btn-primary">Abrir Gemini</a>
+                    </div>
+                    <div class="card">
+                        <h3>🦙 Perplexity AI</h3>
+                        <p>Busca com IA + fontes. Ótimo para "como se diz X em inglês?" com exemplos reais.</p>
+                        <a href="https://www.perplexity.ai" target="_blank" class="btn btn-primary">Abrir Perplexity</a>
+                    </div>
+                    <div class="card">
+                        <h3>🇫🇷 Mistral Le Chat</h3>
+                        <p>IA europeia gratuita, boa para conversação e correção.</p>
+                        <a href="https://chat.mistral.ai" target="_blank" class="btn btn-primary">Abrir Mistral</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🔊 Text-to-Speech (Gerar Áudios)</h2>
+                <div class="card-grid">
+                    <div class="card">
+                        <h3>🎵 TTS Maker ⭐ RECOMENDADO</h3>
+                        <p>Totalmente grátis, sem cadastro, 50+ vozes, vários sotaques (US, UK, AU, IN), download MP3 direto.</p>
+                        <a href="https://ttsmaker.com" target="_blank" class="btn btn-primary">Abrir TTS Maker</a>
+                    </div>
+                    <div class="card">
+                        <h3>📖 NaturalReader</h3>
+                        <p>Versão web grátis, vozes naturais, destaca palavra enquanto lê.</p>
+                        <a href="https://www.naturalreaders.com/online/" target="_blank" class="btn btn-secondary">Abrir NaturalReader</a>
+                    </div>
+                    <div class="card">
+                        <h3>🗣️ ElevenLabs (Plano Free)</h3>
+                        <p>10k chars/mês grátis. Vozes mais realistas. Precisa cadastro.</p>
+                        <a href="https://elevenlabs.io" target="_blank" class="btn btn-secondary">Abrir ElevenLabs</a>
+                    </div>
+                    <div class="card">
+                        <h3>🌐 Microsoft Edge Read Aloud</h3>
+                        <p>Nativo no Edge: selecione texto → botão direito → "Ler em voz alta". Vozes neurais grátis.</p>
+                        <button class="btn btn-secondary" onclick="alert('Já está no seu Edge! Selecione qualquer texto → botão direito → Ler em voz alta')">Como usar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>📝 Gramática & Escrita</h2>
+                <div class="card-grid">
+                    <div class="card">
+                        <h3>📝 LanguageTool</h3>
+                        <p>Corretor gramatical open-source. Extensão para Chrome/Edge/Firefox. Funciona no ChatGPT, Gmail, Docs, etc.</p>
+                        <a href="https://languagetool.org" target="_blank" class="btn btn-primary">Instalar Extensão</a>
+                    </div>
+                    <div class="card">
+                        <h3>✍️ QuillBot (Free)</h3>
+                        <p>Paraphraser, grammar checker, summarizer. Limite diário no plano grátis.</p>
+                        <a href="https://quillbot.com" target="_blank" class="btn btn-secondary">Abrir QuillBot</a>
+                    </div>
+                    <div class="card">
+                        <h3>📖 Grammarly (Free)</h3>
+                        <p>Correção básica + tom. Extensão navegador.</p>
+                        <a href="https://www.grammarly.com" target="_blank" class="btn btn-secondary">Abrir Grammarly</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🃏 Vocabulário & Flashcards</h2>
+                <div class="card-grid">
+                    <div class="card">
+                        <h3>🃏 AnkiWeb (Grátis no Navegador)</h3>
+                        <p>Versão web do Anki - sincroniza com app mobile se quiser depois. Repetição espaçada.</p>
+                        <a href="https://ankiweb.net" target="_blank" class="btn btn-primary">Abrir AnkiWeb</a>
+                    </div>
+                    <div class="card">
+                        <h3>📚 Quizlet (Free)</h3>
+                        <p>Flashcards + jogos + teste. Modo "Learn" grátis.</p>
+                        <a href="https://quizlet.com" target="_blank" class="btn btn-secondary">Abrir Quizlet</a>
+                    </div>
+                    <div class="card">
+                        <h3>🎮 Wordwall</h3>
+                        <p>Jogos de vocabulário grátis (match up, quiz, etc.).</p>
+                        <a href="https://wordwall.net" target="_blank" class="btn btn-secondary">Abrir Wordwall</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🎬 Conteúdo Nativo (YouTube Canais)</h2>
+                <div class="card-grid">
+                    <div class="card">
+                        <h3>🇬🇧 BBC Learning English</h3>
+                        <a href="https://www.youtube.com/c/bbclearningenglish" target="_blank" class="resource-link">Canal Principal</a>
+                        <a href="https://www.youtube.com/playlist?list=PLcETZNoQtY9o2WbW6sQ5n_5vMm0w4R5e" target="_blank" class="resource-link">6 Minute English</a>
+                        <a href="https://www.youtube.com/playlist?list=PLcETZNoQtY9o2WbW6sQ5n_5vMm0w4R5e" target="_blank" class="resource-link">English at Work</a>
+                    </div>
+                    <div class="card">
+                        <h3>🇺🇸 VOA Learning English</h3>
+                        <a href="https://www.youtube.com/c/VOALearningEnglish" target="_blank" class="resource-link">Canal Principal</a>
+                        <a href="https://www.youtube.com/playlist?list=PLcETZNoQtY9o2WbW6sQ5n_5vMm0w4R5e" target="_blank" class="resource-link">English in a Minute</a>
+                    </div>
+                    <div class="card">
+                        <h3>🗣️ Pronúncia Específica</h3>
+                        <a href="https://www.youtube.com/c/RachelsEnglish" target="_blank" class="resource-link">Rachel's English</a>
+                        <a href="https://www.youtube.com/c/EnglishWithLucy" target="_blank" class="resource-link">English with Lucy</a>
+                        <a href="https://www.youtube.com/c/AccentsWayEnglish" target="_blank" class="resource-link">Accent's Way English</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PLANO SEMANAL -->
+        <div class="tab-content" id="tab-weekly">
+            <div class="section">
+                <h2>📅 Rotina Semanal (45-60 min/dia)</h2>
+                <p style="margin-bottom: 20px; color: #666;">Clique no dia de hoje e siga as atividades. Marque ✅ conforme for completando.</p>
+
+                <div class="week-day" id="day-mon">
+                    <h3><span class="day-badge">SEGUNDA</span> 🎧 Listening + Vocabulário</h3>
+                    <ul class="activity-list">
+                        <li>Escolha 1 vídeo curto (3-5 min) no <a href="https://www.bbclearningenglish.com" target="_blank">BBC Learning English</a> ou <a href="https://learningenglish.voanews.com" target="_blank">VOA</a></li>
+                        <li>Ouça <strong>sem legenda</strong> → anote o que entendeu</li>
+                        <li>Ouça <strong>com legenda EN</strong> → complete lacunas</li>
+                        <li>Pegue 5 palavras novas → crie cards no <a href="https://ankiweb.net" target="_blank">AnkiWeb</a> com áudio (TTS Maker)</li>
+                    </ul>
+                    <div class="tts-instruction">
+                        <strong>💡 Dica:</strong> No TTS Maker, cole a palavra + frase de exemplo → escolha voz "English (US) - Male 1" → baixe MP3 → anexe no card do Anki.
+                    </div>
+                </div>
+
+                <div class="week-day" id="day-tue">
+                    <h3><span class="day-badge">TERÇA</span> 📝 Gramática</h3>
+                    <ul class="activity-list">
+                        <li>Peça ao ChatGPT/Gemini: <em>"Ensine [tópico] com 5 exemplos práticos e 5 exercícios de preenchimento"</em></li>
+                        <li>Faça os exercícios → peça correção detalhada</li>
+                        <li>Escreva 3 frases suas usando a regra → cole no <a href="https://languagetool.org" target="_blank">LanguageTool</a></li>
+                        <li>Salve a regra + exemplos no Anki (tipo "Cloze" para preenchimento)</li>
+                    </ul>
+                    <div class="prompt-box">
+                        <div class="prompt-header"><span class="prompt-label">Prompt Pronto</span></div>
+                        <code>Sou nível A2/B1. Crie 10 exercícios de preenchimento sobre [PRESENT PERFECT vs PAST SIMPLE]. Inclua gabarito e explicação breve de cada erro comum. Formato: pergunta → espaço → resposta.</code>
+                        <button class="btn btn-copy" onclick="copyPrompt(this)">📋 Copiar</button>
+                    </div>
+                </div>
+
+                <div class="week-day" id="day-wed">
+                    <h3><span class="day-badge">QUARTA</span> 🗣️ Speaking + Pronúncia</h3>
+                    <ul class="activity-list">
+                        <li>Use <strong>ChatGPT Voice</strong> (chat.openai.com → ícone fone) ou <strong>Gemini Live</strong> → converse 10-15 min</li>
+                        <li>Pegue 3 palavras difíceis → ouça no <a href="https://forvo.com" target="_blank">Forvo</a> → repita gravando no <strong>Gravador de Voz do Windows</strong> (Win+H)</li>
+                        <li><strong>Shadowing:</strong> ouça 1 min de áudio nativo (BBC/VOA) → repita <strong>junto</strong> imitando entonação, pausa, velocidade</li>
+                    </ul>
+                </div>
+
+                <div class="week-day" id="day-thu">
+                    <h3><span class="day-badge">QUINTA</span> 📖 Leitura + Escrita</h3>
+                    <ul class="activity-list">
+                        <li>Leia 1 artigo curto no <a href="https://learningenglish.voanews.com" target="_blank">VOA</a> ou <a href="https://www.newsinlevels.com" target="_blank">News in Levels</a></li>
+                        <li>Resuma em 3 frases no ChatGPT → peça: <em>"Corrija e mostre versões mais naturais"</em></li>
+                        <li>Salve expressões úteis no Anki (tipo "Basic" ou "Cloze")</li>
+                    </ul>
+                    <div class="prompt-box">
+                        <div class="prompt-header"><span class="prompt-label">Prompt Pronto</span></div>
+                        <code>Corrija este texto mantendo meu estilo. Mostre: (1) versão corrigida, (2) tabela com erros + regra, (3) versão mais natural/nativa. Texto: [COLE SEU TEXTO AQUI]</code>
+                        <button class="btn btn-copy" onclick="copyPrompt(this)">📋 Copiar</button>
+                    </div>
+                </div>
+
+                <div class="week-day" id="day-fri">
+                    <h3><span class="day-badge">SEXTA</span> 🔄 Revisão Ativa</h3>
+                    <ul class="activity-list">
+                        <li>Revise cards do <a href="https://ankiweb.net" target="_blank">AnkiWeb</a> (10-15 min)</li>
+                        <li>Peça ao ChatGPT: <em>"Crie um quiz de 10 questões misturando o que estudei esta semana"</em></li>
+                        <li>Grave áudio de 1 min falando sobre sua semana (Gravador Windows Win+H) → ouça e autoavalie</li>
+                    </ul>
+                    <div class="prompt-box">
+                        <div class="prompt-header"><span class="prompt-label">Prompt Pronto</span></div>
+                        <code>Baseado nestes tópicos: [LISTE: present perfect, vocabulário de aeroporto, phrasal verbs com GET], crie um quiz de 15 questões: 5 múltipla escolha, 5 preenchimento, 5 'corrija o erro'. Mostre gabarito no final.</code>
+                        <button class="btn btn-copy" onclick="copyPrompt(this)">📋 Copiar</button>
+                    </div>
+                </div>
+
+                <div class="week-day" id="day-sat">
+                    <h3><span class="day-badge">SÁBADO</span> 🌊 Imersão Leve</h3>
+                    <ul class="activity-list">
+                        <li>Assista 1 episódio de série/filme <strong>com legenda EN</strong> (não PT!)</li>
+                        <li>Ouça 1 podcast nível iniciante enquanto faz outra coisa:</li>
+                    </ul>
+                    <div class="card-grid" style="margin-top: 10px;">
+                        <a href="https://www.bbc.co.uk/learningenglish/english/features/6-minute-english" target="_blank" class="card" style="text-align:center; text-decoration:none; color:inherit;">
+                            <h3>☕ 6 Minute English</h3>
+                            <p>BBC - 6 min, tema + vocabulário</p>
+                        </a>
+                        <a href="https://www.eslpod.com" target="_blank" class="card" style="text-align:center; text-decoration:none; color:inherit;">
+                            <h3>🎧 ESL Pod</h3>
+                            <p>Diálogos lentos + explicação</p>
+                        </a>
+                        <a href="https://www.bbc.co.uk/sounds/category/learning" target="_blank" class="card" style="text-align:center; text-decoration:none; color:inherit;">
+                            <h3>📻 BBC Sounds Learning</h3>
+                            <p>Vários programas grátis</p>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="week-day" id="day-sun">
+                    <h3><span class="day-badge">DOMINGO</span> 😴 Descanso / Opcional</h3>
+                    <ul class="activity-list">
+                        <li>Só se quiser: revise Anki (5 min)</li>
+                        <li>Jogue <a href="https://www.duolingo.com" target="_blank">Duolingo</a> 10 min (versão web grátis)</li>
+                        <li>Converse com IA sobre tema livre</li>
+                        <li>Planeje a semana seguinte: quais tópicos de gramática, quais vídeos assistir</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>✅ Checklist Semanal</h2>
+                <ul class="checklist" id="weekly-checklist">
+                    <li data-day="mon">Segunda - Listening + Vocab (5 palavras no Anki)</li>
+                    <li data-day="tue">Terça - Gramática (exercícios + 3 frases)</li>
+                    <li data-day="wed">Quarta - Speaking 15 min + Shadowing 5 min</li>
+                    <li data-day="thu">Quinta - Leitura + Resumo + 3 expressões no Anki</li>
+                    <li data-day="fri">Sexta - Anki review + Quiz + Gravação 1 min</li>
+                    <li data-day="sat">Sábado - Imersão (série/podcast 30+ min)</li>
+                    <li data-day="sun">Domingo - Planejamento semana seguinte</li>
+                </ul>
+                <div style="margin-top: 15px;">
+                    <button class="btn btn-primary" onclick="saveChecklist()">💾 Salvar Progresso</button>
+                    <button class="btn btn-secondary" onclick="resetChecklist()">🔄 Resetar Semana</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROMPTS -->
+        <div class="tab-content" id="tab-prompts">
+            <div class="section">
+                <h2>💬 Biblioteca de Prompts Prontos</h2>
+                <p style="margin-bottom: 20px; color: #666;">Copie e cole direto no ChatGPT, Gemini, Mistral ou Perplexity.</p>
+
+                <div class="card">
+                    <h3>🎯 1. Exercícios de Gramática Personalizados</h3>
+                    <div class="prompt-box">
+                        <div class="prompt-header"><span class="prompt-label">Gramática</span></div>
+                        <code>Sou nível [A1/A2/B1/B2]. Crie 15 exercícios de [PRESENT PERFECT / CONDITIONALS / PASSIVE VOICE / PHRASAL VERBS] com: (1) 5 múltipla escolha, (2) 5 preenchimento, (3) 5 "corrija o erro". Inclua gabarito comentado no final. Foque em erros comuns de falantes de português.</code>
+                        <button class="btn btn-copy" onclick="copyPrompt(this)">📋 Copiar</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>✍️ 2. Correção de Texto com Explicação</h3>
+                    <div class="prompt-box">
+                        <div class="prompt-header"><span class="prompt-label">Escrita</span></div>
+                        <code>Corrija este texto mantendo meu estilo e nível. Mostre em 3 partes: (1) versão corrigida, (2) tabela: erro original | correção | regra/ explicação breve, (3) versão mais natural/avançada (nível nativo). Destaque diferenças de registro (formal/informal). Texto: [COLE AQUI]</code>
+                        <button class="btn btn-copy" onclick="copyPrompt(this)">📋 Copiar</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>🎭 3. Diálogo Situacional + Áudio</h3>
+                    <div class="prompt-box">
+                        <div class="prompt-header"><span class="prompt-label">Listening/Speaking</span></div>
+                        <code>Crie um diálogo realista (10-12 falas) entre duas pessoas em: [SITUAÇÃO: check-in aeroporto / entrevista emprego / reclamar hotel / pedir comida / reunião trabalho / small talk]. Nível B1/B2. Use inglês natural (contractions, fillers, idioms leves). No final, me dê o texto LIMPO (sem marcações) para colar no TTS Maker e gerar áudio.</code>
+                        <button class="btn btn-copy" onclick="copyPrompt(this)">📋 Copiar</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>🗣️ 4. Prática de Conversação Guiada</h3>
+                    <div class="prompt-box">
+                        <div class="prompt-header"><span class="prompt-label">Speaking</span></div>
+                        <code>Vamos praticar conversação sobre [TEMA: viagens / trabalho / hobbies / tecnologia / saúde]. Regras: (1) Você fala uma frase, eu respondo. (2) Corrija APENAS erros graves no final de cada minha resposta. (3) Se eu travar, dê uma dica sutil. (4) A cada 5 trocas, sugira vocabulário mais rico. Comece você com uma pergunta aberta.</code>
+                        <button class="btn btn-copy" onclick="copyPrompt(this)">📋 Copiar</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>🧠 5. Quiz de Revisão Semanal</h3>
+                    <div class="prompt-box">
+                        <div class="prompt-header"><span class="prompt-label">Revisão</span></div>
+                        <code>Baseado nestes tópicos da semana: [LISTE: ex: present perfect, 10 palavras de aeroporto, 5 phrasal verbs com GET, reported speech], crie um quiz completo de 20 questões: 8 múltipla escolha, 6 preenchimento, 6 "corrija o erro/escolha a melhor opção". Mostre gabarito comentado no final. Nível B1.</code>
+                        <button class="btn btn-copy" onclick="copyPrompt(this)">📋 Copiar</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>📚 6. Explicação de Conceito com Exemplos Meus</h3>
+                    <div class="prompt-box">
+                        <div class="prompt-header"><span class="prompt-label">Gramática</span></div>
+                        <code>Explique [CONCEITO: ex: difference between BEEN and GONE / WHEN to use PRESENT PERFECT vs PAST SIMPLE / HOW to use GET passive] como se eu fosse um falante de português. Use: (1) regra simples, (2) 5 exemplos contrastivos PT→EN, (3) 3 "pegadinhas" comuns, (4) dica de memória (mnemônico). Linguagem direta, sem jargão linguístico.</code>
+                        <button class="btn btn-copy" onclick="copyPrompt(this)">📋 Copiar</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>🎯 7. Simulação de Prova/Entrevista</h3>
+                    <div class="prompt-box">
+                        <div class="prompt-header"><span class="prompt-label">Exames</span></div>
+                        <code>Simule uma [ENTREVISTA DE EMPREGO / PROVA TOEFL/IELTS SPEAKING / APRESENTAÇÃO] para nível B2. Faça 5-7 perguntas uma por vez. Eu respondo. Após cada resposta, dê: (1) nota 1-10, (2) 1 ponto forte, (3) 1 melhoria específica, (4) versão aprimorada da minha resposta. No final, resumo geral + plano de ação.</code>
+                        <button class="btn btn-copy" onclick="copyPrompt(this)">📋 Copiar</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>📖 8. Leitura Adaptada + Exercícios</h3>
+                    <div class="prompt-box">
+                        <div class="prompt-header"><span class="prompt-label">Reading</span></div>
+                        <code>Crie um texto curto (150-200 palavras) sobre [TEMA: tecnologia / meio ambiente / cultura / saúde] no nível [A2/B1/B2]. Depois crie: (1) 5 questões de compreensão (múltipla escolha), (2) 5 palavras-chave com definição em inglês + exemplo, (3) exercício de collocations (complete com preposição/verbo), (4) prompt de discussão para speaking. Texto estilo VOA/BBC Learning English.</code>
+                        <button class="btn btn-copy" onclick="copyPrompt(this)">📋 Copiar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- KIT DE ÁUDIOS -->
+        <div class="tab-content" id="tab-audio">
+            <div class="section">
+                <h2>🎵 Kit de Áudios Prontos para Gerar no TTS Maker</h2>
+                <p style="margin-bottom: 20px; color: #666;">Copie cada texto → cole no <a href="https://ttsmaker.com" target="_blank">TTS Maker</a> → escolha voz → baixe MP3 → use no Anki/Shadowing.</p>
+
+                <div class="tts-instruction">
+                    <strong>⚙️ Configuração Recomendada no TTS Maker:</strong><br>
+                    • Voice: <strong>English (US) - Male 1</strong> ou <strong>Female 1</strong> (mais naturais)<br>
+                    • Speed: <strong>1.0x</strong> (normal) ou <strong>0.9x</strong> (se iniciante)<br>
+                    • Format: <strong>MP3</strong><br>
+                    • Clique em "Convert to Speech" → "Download"
+                </div>
+
+                <div class="card">
+                    <h3>🎤 Áudio 1: Apresentação Pessoal (30 seg)</h3>
+                    <p>Use para: shadowing, gravar sua versão, comparar pronúncia.</p>
+                    <div class="audio-text" id="audio1-text">
+Hi, I'm [SEU NOME]. I'm from Brazil and I'm learning English. I work as a [SUA PROFISSÃO] and I enjoy [SEU HOBBY] in my free time. My goal is to speak English fluently in one year. Nice to meet you!
+                    </div>
+                    <button class="btn btn-copy" onclick="copyText('audio1-text', this)">📋 Copiar Texto</button>
+                    <a href="https://ttsmaker.com" target="_blank" class="btn btn-primary" style="margin-left: 10px;">🔊 Abrir TTS Maker</a>
+                </div>
+
+                <div class="card">
+                    <h3>☀️ Áudio 2: Rotina Diária (45 seg)</h3>
+                    <p>Presente simples, verbos de rotina, conectores temporais.</p>
+                    <div class="audio-text" id="audio2-text">
+I usually wake up at six thirty. I brush my teeth, take a shower, and have breakfast. I leave home at seven forty-five and take the bus to work. I work from nine to six. In the evening, I study English for thirty minutes, watch a series, and go to bed around eleven.
+                    </div>
+                    <button class="btn btn-copy" onclick="copyText('audio2-text', this)">📋 Copiar Texto</button>
+                    <a href="https://ttsmaker.com" target="_blank" class="btn btn-primary" style="margin-left: 10px;">🔊 Abrir TTS Maker</a>
+                </div>
+
+                <div class="card">
+                    <h3>☕ Áudio 3: Diálogo - Pedindo Café (1 min)</h3>
+                    <p>Situação real, inglês natural, vocabulário de comida/bebida.</p>
+                    <div class="audio-text" id="audio3-text">
+A: Good morning! What can I get you?
+B: Hi, I'd like a medium latte, please. Oat milk if you have it.
+A: Sure thing. Anything else?
+B: Yeah, a blueberry muffin. To go, please.
+A: That's six fifty. Card or cash?
+B: Card, thanks. Have a nice day!
+A: You too. Your order will be ready in a minute.
+                    </div>
+                    <button class="btn btn-copy" onclick="copyText('audio3-text', this)">📋 Copiar Texto</button>
+                    <a href="https://ttsmaker.com" target="_blank" class="btn btn-primary" style="margin-left: 10px;">🔊 Abrir TTS Maker</a>
+                </div>
+
+                <div class="card">
+                    <h3>✈️ Áudio 4: Check-in no Aeroporto (1 min 30 seg)</h3>
+                    <p>Vocabulário de viagem, formulários, perguntas comuns.</p>
+                    <div class="audio-text" id="audio4-text">
+Agent: Good afternoon. May I see your passport and boarding pass?
+Passenger: Here you go. I'd like to check one bag.
+Agent: Certainly. Did you pack the bag yourself?
+Passenger: Yes, I did. And no one else has access to it.
+Agent: Great. Please place it on the scale. ... It's 22 kilos, within the limit.
+Passenger: Perfect. Can I get an aisle seat?
+Agent: Let me check... Yes, I can move you to 14C, aisle. Here's your boarding pass. Boarding starts at gate B4 in 40 minutes. Have a safe flight!
+Passenger: Thank you very much!
+                    </div>
+                    <button class="btn btn-copy" onclick="copyText('audio4-text', this)">📋 Copiar Texto</button>
+                    <a href="https://ttsmaker.com" target="_blank" class="btn btn-primary" style="margin-left: 10px;">🔊 Abrir TTS Maker</a>
+                </div>
+
+                <div class="card">
+                    <h3>💼 Áudio 5: Entrevista de Emprego - Perguntas Clássicas (2 min)</h3>
+                    <p>Pratique respondendo. Grave-se (Win+H) e compare.</p>
+                    <div class="audio-text" id="audio5-text">
+Interviewer: Tell me about yourself.
+Interviewer: Why do you want to work here?
+Interviewer: What are your greatest strengths?
+Interviewer: What is your biggest weakness?
+Interviewer: Describe a challenge you faced and how you handled it.
+Interviewer: Where do you see yourself in five years?
+Interviewer: Why should we hire you?
+Interviewer: Do you have any questions for us?
+                    </div>
+                    <button class="btn btn-copy" onclick="copyText('audio5-text', this)">📋 Copiar Texto</button>
+                    <a href="https://ttsmaker.com" target="_blank" class="btn btn-primary" style="margin-left: 10px;">🔊 Abrir TTS Maker</a>
+                </div>
+
+                <div class="card">
+                    <h3>🏠 Áudio 6: Descrevendo sua Casa (45 seg)</h3>
+                    <p>There is/are, preposições de lugar, vocabulário de móveis.</p>
+                    <div class="audio-text" id="audio6-text">
+My apartment has two bedrooms, a living room, a kitchen, and a bathroom. In the living room, there's a comfortable sofa in front of the TV. Next to the sofa, there's a small table with a lamp. The kitchen is small but modern. There are white cabinets and a stainless steel fridge. My bedroom has a big window with a view of the park. There's a bed, a wardrobe, and a desk where I study English.
+                    </div>
+                    <button class="btn btn-copy" onclick="copyText('audio6-text', this)">📋 Copiar Texto</button>
+                    <a href="https://ttsmaker.com" target="_blank" class="btn btn-primary" style="margin-left: 10px;">🔊 Abrir TTS Maker</a>
+                </div>
+
+                <div class="card">
+                    <h3>🛒 Áudio 7: Fazendo Compras no Supermercado (1 min)</h3>
+                    <p>Quantificadores, comida, perguntas educadas.</p>
+                    <div class="audio-text" id="audio7-text">
+Shopper: Excuse me, where can I find the olive oil?
+Employee: It's in aisle 4, next to the vinegar.
+Shopper: Thanks. Do you have any whole wheat bread?
+Employee: Yes, fresh bread is in the bakery section, at the back of the store.
+Shopper: Great. Also, I'm looking for almond milk.
+Employee: That's in the refrigerated section, aisle 7, near the yogurt.
+Shopper: Perfect. One more thing - do you have any discount on these apples?
+Employee: Yes, they're on sale today - two dollars ninety-nine per pound.
+Shopper: I'll take three pounds, please.
+                    </div>
+                    <button class="btn btn-copy" onclick="copyText('audio7-text', this)">📋 Copiar Texto</button>
+                    <a href="https://ttsmaker.com" target="_blank" class="btn btn-primary" style="margin-left: 10px;">🔊 Abrir TTS Maker</a>
+                </div>
+
+                <div class="card">
+                    <h3>🌤️ Áudio 8: Small Talk - Clima e Fim de Semana (45 seg)</h3>
+                    <p>Conversa casual, future/past simples, expressões idiomáticas.</p>
+                    <div class="audio-text" id="audio8-text">
+A: Nice weather today, isn't it?
+B: Yeah, finally! It's been raining all week. Perfect for the weekend.
+A: Do you have any plans?
+B: I'm thinking of going hiking on Saturday if it stays sunny. What about you?
+A: I'll probably just relax at home. Maybe catch up on some reading.
+B: Sounds nice. Well, enjoy your weekend!
+A: You too. See you Monday!
+                    </div>
+                    <button class="btn btn-copy" onclick="copyText('audio8-text', this)">📋 Copiar Texto</button>
+                    <a href="https://ttsmaker.com" target="_blank" class="btn btn-primary" style="margin-left: 10px;">🔊 Abrir TTS Maker</a>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🎯 Como Usar Estes Áudios (Técnicas)</h2>
+                <div class="card-grid">
+                    <div class="card">
+                        <h3>1️⃣ Shadowing (Sombra)</h3>
+                        <p>Ouça → repita <strong>junto</strong> (quase simultâneo) imitando velocidade, entonação, pausas. Faça 3x por áudio.</p>
+                    </div>
+                    <div class="card">
+                        <h3>2️⃣ Listen & Repeat</h3>
+                        <p>Ouça uma frase → pause → repita sozinho. Foque em sons difíceis (th, r, vogais).</p>
+                    </div>
+                    <div class="card">
+                        <h3>3️⃣ Ditado (Dictation)</h3>
+                        <p>Ouça sem ver o texto → escreva o que ouviu → compare com original. Ótimo para listening.</p>
+                    </div>
+                    <div class="card">
+                        <h3>4️⃣ Gravação Própria</h3>
+                        <p>Use <strong>Win+H</strong> (Gravador Windows) → grave sua versão → ouça → compare com original → repita.</p>
+                    </div>
+                    <div class="card">
+                        <h3>5️⃣ Anki + Áudio</h3>
+                        <p>No AnkiWeb: crie card → clique no ícone de clipe (anexar) → selecione o MP3 → agora o card toca áudio na revisão.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROGRESSO -->
+        <div class="tab-content" id="tab-progress">
+            <div class="section">
+                <h2>📈 Rastreador de Progresso</h2>
+                <p style="margin-bottom: 20px; color: #666;">Atualize semanalmente. Os dados ficam salvos no seu navegador (localStorage).</p>
+
+                <div class="card-grid">
+                    <div class="card">
+                        <h3>📊 Métricas Semanais</h3>
+                        <div style="display: grid; gap: 15px;">
+                            <div>
+                                <label style="display:block; margin-bottom:5px; font-weight:600;">Cards Anki aprendidos esta semana</label>
+                                <input type="number" id="metric-anki" min="0" value="0" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:6px;">
+                            </div>
+                            <div>
+                                <label style="display:block; margin-bottom:5px; font-weight:600;">Minutos de Listening (vídeos/podcasts)</label>
+                                <input type="number" id="metric-listening" min="0" value="0" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:6px;">
+                            </div>
+                            <div>
+                                <label style="display:block; margin-bottom:5px; font-weight:600;">Minutos de Speaking (conversa IA + shadowing)</label>
+                                <input type="number" id="metric-speaking" min="0" value="0" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:6px;">
+                            </div>
+                            <div>
+                                <label style="display:block; margin-bottom:5px; font-weight:600;">Textos escritos + corrigidos</label>
+                                <input type="number" id="metric-writing" min="0" value="0" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:6px;">
+                            </div>
+                            <div>
+                                <label style="display:block; margin-bottom:5px; font-weight:600;">Score médio nos quizzes (%)</label>
+                                <input type="number" id="metric-quiz" min="0" max="100" value="0" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:6px;">
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" style="margin-top:15px;" onclick="saveMetrics()">💾 Salvar Métricas</button>
+                    </div>
+
+                    <div class="card">
+                        <h3>📅 Histórico (últimas 8 semanas)</h3>
+                        <div id="metrics-history" style="max-height: 300px; overflow-y: auto;">
+                            <p style="color:#999; text-align:center; padding:20px;">Nenhum dado salvo ainda. Preencha acima e clique em Salvar.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🎯 Metas Mensais Sugeridas</h2>
+                <div class="card-grid">
+                    <div class="card">
+                        <h3>📚 Vocabulário</h3>
+                        <p><strong>Meta:</strong> +80-100 cards/mês no Anki (20-25/semana)</p>
+                        <div class="progress-bar"><div class="progress-fill" id="goal-vocab" style="width: 0%"></div></div>
+                    </div>
+                    <div class="card">
+                        <h3>🎧 Listening</h3>
+                        <p><strong>Meta:</strong> 4-6h/mês de conteúdo nativo (BBC, VOA, podcasts)</p>
+                        <div class="progress-bar"><div class="progress-fill" id="goal-listening" style="width: 0%"></div></div>
+                    </div>
+                    <div class="card">
+                        <h3>🗣️ Speaking</h3>
+                        <p><strong>Meta:</strong> 2-3h/mês conversação ativa (IA + shadowing + gravação)</p>
+                        <div class="progress-bar"><div class="progress-fill" id="goal-speaking" style="width: 0%"></div></div>
+                    </div>
+                    <div class="card">
+                        <h3>✍️ Escrita</h3>
+                        <p><strong>Meta:</strong> 4-8 textos/mês corrigidos pela IA</p>
+                        <div class="progress-bar"><div class="progress-fill" id="goal-writing" style="width: 0%"></div></div>
+                    </div>
+                    <div class="card">
+                        <h3>📝 Gramática</h3>
+                        <p><strong>Meta:</strong> 1 tópico/semana dominado (exercícios + produção própria)</p>
+                        <div class="progress-bar"><div class="progress-fill" id="goal-grammar" style="width: 0%"></div></div>
+                    </div>
+                    <div class="card">
+                        <h3>🏆 Consistência</h3>
+                        <p><strong>Meta:</strong> 5+ dias/semana estudando (streak)</p>
+                        <div class="progress-bar"><div class="progress-fill" id="goal-consistency" style="width: 0%"></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🔍 Autoavaliação Mensal (Faça no último domingo do mês)</h2>
+                <div class="card">
+                    <p>Responda honestamente e salve para comparar mês a mês:</p>
+                    <div style="display: grid; gap: 15px; margin-top: 15px;">
+                        <div>
+                            <label style="font-weight:600;">1. Consigo entender um vídeo VOA/BBC sem legenda? (1-10)</label>
+                            <input type="range" id="self-listen" min="1" max="10" value="5" style="width:100%;" oninput="document.getElementById('val-listen').textContent=this.value">
+                            <span id="val-listen">5</span>
+                        </div>
+                        <div>
+                            <label style="font-weight:600;">2. Consigo me fazer entender em conversa básica? (1-10)</label>
+                            <input type="range" id="self-speak" min="1" max="10" value="5" style="width:100%;" oninput="document.getElementById('val-speak').textContent=this.value">
+                            <span id="val-speak">5</span>
+                        </div>
+                        <div>
+                            <label style="font-weight:600;">3. Me sinto confiante escrevendo e-mails/textos simples? (1-10)</label>
+                            <input type="range" id="self-write" min="1" max="10" value="5" style="width:100%;" oninput="document.getElementById('val-write').textContent=this.value">
+                            <span id="val-write">5</span>
+                        </div>
+                        <div>
+                            <label style="font-weight:600;">4. Reconheço e uso os tópicos de gramática estudados? (1-10)</label>
+                            <input type="range" id="self-grammar" min="1" max="10" value="5" style="width:100%;" oninput="document.getElementById('val-grammar').textContent=this.value">
+                            <span id="val-grammar">5</span>
+                        </div>
+                        <div>
+                            <label style="font-weight:600;">5. Principais dificuldades atuais:</label>
+                            <textarea id="self-struggles" rows="3" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:6px;" placeholder="Ex: phrasal verbs, listening rápido, preposições, pronúncia de TH..."></textarea>
+                        </div>
+                        <div>
+                            <label style="font-weight:600;">6. O que vou focar no próximo mês:</label>
+                            <textarea id="self-focus" rows="3" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:6px;" placeholder="Ex: condicionais, vocabulário de trabalho, shadowing diário..."></textarea>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" style="margin-top:15px;" onclick="saveSelfAssessment()">💾 Salvar Autoavaliação</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- DICAS PC -->
+        <div class="tab-content" id="tab-tips">
+            <div class="section">
+                <h2>💻 Setup 100% PC - Dicas de Ouro</h2>
+
+                <div class="card">
+                    <h3>🎤 Ative o Modo Voz no ChatGPT/Gemini (Navegador)</h3>
+                    <ol style="padding-left: 20px; line-height: 2;">
+                        <li>Abra <a href="https://chat.openai.com" target="_blank">chat.openai.com</a> ou <a href="https://gemini.google.com" target="_blank">gemini.google.com</a></li>
+                        <li>Procure o ícone de <strong>fone de ouvido 🎤</strong> na barra de input</li>
+                        <li>Clique → permita acesso ao microfone → converse naturalmente</li>
+                        <li><strong>Gemini Live:</strong> No Gemini, clique no ícone de onda de som ao lado do microfone para modo contínuo</li>
+                    </ol>
+                </div>
+
+                <div class="card">
+                    <h3>🎙️ Grave sua Voz no Windows (Sem Instalar Nada)</h3>
+                    <ul style="padding-left: 20px; line-height: 2;">
+                        <li><strong>Win + H</strong> → abre ditado de voz / gravador (Windows 10/11)</li>
+                        <li><strong>Win + G</strong> → Xbox Game Bar → botão "Gravar" (captura áudio do microfone + sistema)</li>
+                        <li><strong>Audacity (grátis):</strong> <a href="https://www.audacityteam.org/download/" target="_blank">audacityteam.org</a> → editor completo de áudio</li>
+                        <li><strong>Online Voice Recorder:</strong> <a href="https://online-voice-recorder.com" target="_blank">online-voice-recorder.com</a> (funciona no navegador)</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>⌨️ Atalhos Úteis para Estudos</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-top: 10px;">
+                        <div style="background:#f0f0f0; padding:10px; border-radius:6px;"><strong>Ctrl + T</strong> Nova aba</div>
+                        <div style="background:#f0f0f0; padding:10px; border-radius:6px;"><strong>Ctrl + Shift + T</strong> Reabrir aba fechada</div>
+                        <div style="background:#f0f0f0; padding:10px; border-radius:6px;"><strong>Ctrl + Tab</strong> Próxima aba</div>
+                        <div style="background:#f0f0f0; padding:10px; border-radius:6px;"><strong>Win + ←/→</strong> Dividir tela (2 janelas lado a lado)</div>
+                        <div style="background:#f0f0f0; padding:10px; border-radius:6px;"><strong>Win + .</strong> Emojis / símbolos</div>
+                        <div style="background:#f0f0f0; padding:10px; border-radius:6px;"><strong>Ctrl + Shift + V</strong> Colar sem formatação</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>🖥️ Layout Recomendado (Duas Tela ou Janelas Divididas)</h3>
+                    <p>Use <strong>Win + Seta Esquerda/Direita</strong> para encaixar janelas:</p>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+                        <div class="card" style="background:#eef0f7; border-color:#667eea;">
+                            <h4 style="color:#667eea; margin-bottom:10px;">📺 Lado Esquerdo - CONTEÚDO</h4>
+                            <ul style="padding-left:20px; font-size:0.9rem;">
+                                <li>YouTube (BBC/VOA) - vídeo com legenda EN</li>
+                                <li>Artigo VOA / News in Levels</li>
+                                <li>TTS Maker (gerando áudio)</li>
+                                <li>Forvo (pronúncia)</li>
+                            </ul>
+                        </div>
+                        <div class="card" style="background:#f0f7ee; border-color:#28a745;">
+                            <h4 style="color:#28a745; margin-bottom:10px;">🤖 Lado Direito - IA FERRAMENTA</h4>
+                            <ul style="padding-left:20px; font-size:0.9rem;">
+                                <li>ChatGPT / Gemini (conversa, correção, exercícios)</li>
+                                <li>AnkiWeb (revisão cards)</li>
+                                <li>LanguageTool (correção automática)</li>
+                                <li>DeepL / Reverso (tradução contextual)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>🔧 Extensões Chrome/Edge Essenciais (Grátis)</h3>
+                    <div class="card-grid">
+                        <div class="card">
+                            <h3>📝 LanguageTool</h3>
+                            <p>Correção gramatical em qualquer caixa de texto (ChatGPT, Gmail, Docs, Notion).</p>
+                            <a href="https://chromewebstore.google.com/detail/language-tool-grammar-che/oldceeleldhonbafppcapldpdifcinji" target="_blank" class="btn btn-primary">Instalar</a>
+                        </div>
+                        <div class="card">
+                            <h3>🌐 Dualsub / Language Reactor</h3>
+                            <p>Legenda dupla (EN + PT) no YouTube/Netflix. Hover = tradução.</p>
+                            <a href="https://chromewebstore.google.com/detail/language-reactor/hoombieelmmlpkkajdekjnbniodobdn" target="_blank" class="btn btn-primary">Instalar</a>
+                        </div>
+                        <div class="card">
+                            <h3>🔍 Google Dictionary / Mate Translate</h3>
+                            <p>Clique duplo em qualquer palavra = definição/tradução instantânea.</p>
+                            <a href="https://chromewebstore.google.com/detail/google-dictionary-by-goog/mgijmajocgfcbeboacabfgobmjgjcoja" target="_blank" class="btn btn-secondary">Dictionary</a>
+                            <a href="https://chromewebstore.google.com/detail/mate-translate-%E2%80%93-translator/ihmgiclibbndffejedjimfjmfoabpcke" target="_blank" class="btn btn-secondary">Mate Translate</a>
+                        </div>
+                        <div class="card">
+                            <h3>🎬 Video Speed Controller</h3>
+                            <p>Controle velocidade de QUALQUER vídeo (S = mais lento, D = mais rápido).</p>
+                            <a href="https://chromewebstore.google.com/detail/video-speed-controller/nffaoalbilbmmfgbnbgppjihopabppdk" target="_blank" class="btn btn-primary">Instalar</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>📁 Organize seus Arquivos (Pastas Sugeridas)</h3>
+                    <p>Crie esta estrutura na sua pasta <code>DEEPSEEK PROJETOS</code>:</p>
+                    <pre style="background:#1e1e1e; color:#d4d4d4; padding:15px; border-radius:8px; font-size:0.85rem; overflow-x:auto;">DEEPSEEK PROJETOS/
+├── english-study-hub.html     ← ESTE ARQUIVO (clique 2x para abrir no navegador)
+├── audio-files/               ← MP3s gerados no TTS Maker
+│   ├── 01-apresentacao.mp3
+│   ├── 02-rotina.mp3
+│   └── ...
+├── anki-export/               ← Backups do Anki (.apkg)
+├── writing-practice/          ← Textos que você escreveu + correção IA
+│   ├── 2024-01-15_email-trabalho.txt
+│   └── ...
+├── grammar-notes/             ← Regras + exemplos que você salvou
+│   ├── present-perfect.md
+│   └── ...
+└── progress-tracker/          ← Prints/exports das métricas</pre>
+                </div>
+
+                <div class="card">
+                    <h3>🚀 Fluxo de Estudo Diário (Exemplo Prático)</h3>
+                    <ol style="padding-left: 20px; line-height: 2.2;">
+                        <li><strong>Abra este hub</strong> (duplo clique no .html)</li>
+                        <li><strong>Vá na aba "📅 Plano Semanal"</strong> → veja o dia de hoje</li>
+                        <li><strong>Win + ←</strong> no YouTube (BBC/VOA) | <strong>Win + →</strong> no ChatGPT</li>
+                        <li>Faça a atividade de listening (15-20 min)</li>
+                        <li>Copie prompt da aba "💬 Prompts" → cole no ChatGPT</li>
+                        <li>Gere áudio no TTS Maker → salve em <code>audio-files/</code></li>
+                        <li>Crie cards no AnkiWeb com o áudio anexado</li>
+                        <li>Marque ✅ no checklist da aba "📅 Plano Semanal"</li>
+                        <li>No final da semana: aba "📈 Progresso" → preencha métricas</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROGRESSÃO RPG / MASTERY GATES -->
+        <div class="tab-content" id="tab-rpg">
+            <div class="section">
+                <h2>🎮 Progressão RPG — Mastery Gates</h2>
+                <p style="margin-bottom: 20px; color: #666;">
+                    <strong>Regra de Ouro:</strong> <em>"Entendimento > Perfeição. Prática consistente > Paralisia."</em><br>
+                    Não precisa ser 100%. Gate = <strong>critério mínimo mensurável</strong> pra avançar sem acumular gaps.
+                </p>
+            </div>
+        </div>
+
+        <!-- SCRIPT PRINCIPAL -->
+
+                <!-- PHASE OVERVIEW -->
+                <div class="card-grid">
+                    <div class="card" style="border-left: 4px solid #28a745;">
+                        <h3>🌱 EARLY GAME — Fundação (Input + Fonética)</h3>
+                        <p style="color: #28a745; font-weight: 600; margin-bottom: 10px;">Foco: Compreensão auditiva massiva + Pronúncia core</p>
+                        <ul style="padding-left: 20px; line-height: 1.8; color: #555;">
+                            <li>🎧 <strong>Listening:</strong> 30+ min/dia VOA/BBC/6 Minute English <strong>sem legenda</strong></li>
+                            <li>🔤 <strong>Fonética:</strong> TH, R, vogais longas/curtas, connected speech (Rachel's English)</li>
+                            <li>📚 <strong>Vocabulário:</strong> 20 cards/semana no Anki (frequência + áudio TTS)</li>
+                            <li>📝 <strong>Gramática:</strong> Presente, Passado, Futuro, Presente Perfeito (uso, não regra)</li>
+                            <li>🗣️ <strong>Speaking controlado:</strong> Shadowing 10 min/dia (áudios do hub)</li>
+                        </ul>
+                        <div style="margin-top: 15px; padding: 12px; background: #e8f5e9; border-radius: 8px;">
+                            <strong>🎯 Gate Early → Mid:</strong> Entende ≥ 70% de <a href="https://www.bbc.co.uk/learningenglish/english/features/6-minute-english" target="_blank">6 Minute English</a> sem legenda + Ditado 1 min com ≤ 3 erros
+                        </div>
+                    </div>
+
+                    <div class="card" style="border-left: 4px solid #ffc107;">
+                        <h3>⚔️ MID GAME — Consolidação (Automatização + Output Guiado)</h3>
+                        <p style="color: #856404; font-weight: 600; margin-bottom: 10px;">Foco: Transformar input passivo em output ativo controlado</p>
+                        <ul style="padding-left: 20px; line-height: 1.8; color: #555;">
+                            <li>🎯 <strong>Shadowing avançado:</strong> 15 min/dia a 1.0x sem travar (áudios 3-8 do hub)</li>
+                            <li>✍️ <strong>Writing + Correção IA:</strong> 2 textos/semana no ChatGPT (prompt do hub)</li>
+                            <li>📖 <strong>Leitura ativa:</strong> News in Levels / VOA → resumo oral gravado (Win+H)</li>
+                            <li>🧠 <strong>Gramática aplicada:</strong> 1 tópico/semana + quiz ChatGPT (prompt do hub)</li>
+                            <li>💬 <strong>Conversação guiada:</strong> 10 min/semana com IA (prompt "Prática Guiada")</li>
+                        </ul>
+                        <div style="margin-top: 15px; padding: 12px; background: #fff8e1; border-radius: 8px;">
+                            <strong>🎯 Gate Mid → End:</strong> Shadowing 2 min a 1.0x fluido + Conversa IA 10 min sem travar >3x/min + Autoavaliação Speaking ≥ 7/10
+                        </div>
+                    </div>
+
+                    <div class="card" style="border-left: 4px solid #667eea;">
+                        <h3>🏆 END GAME — Fluência Funcional (Output Espontâneo)</h3>
+                        <p style="color: #667eea; font-weight: 600; margin-bottom: 10px;">Foco: Conversação real, trabalho, prova, vida</p>
+                        <ul style="padding-left: 20px; line-height: 1.8; color: #555;">
+                            <li>🗣️ <strong>Conversação livre:</strong> 20+ min/semana (IA + humanos se possível)</li>
+                            <li>🎭 <strong>Simulações:</strong> Entrevista, apresentação, reunião (prompts do hub)</li>
+                            <li>📺 <strong>Consumo nativo:</strong> Séries/filmes só legenda EN, podcasts nativos</li>
+                            <li>📝 <strong>Writing real:</strong> Emails, relatórios, LinkedIn em inglês</li>
+                            <li>🔁 <strong>Manutenção:</strong> Anki review + 1 shadowing/semana + 1 conversa/semana</li>
+                        </ul>
+                        <div style="margin-top: 15px; padding: 12px; background: #eef0f7; border-radius: 8px;">
+                            <strong>🎯 End Game = Estilo de vida:</strong> Inglês deixa de ser "estudo" e vira ferramenta diária
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CURRENT PHASE DETECTOR -->
+            <div class="section">
+                <h2>📍 Onde Você Está Agora? (Auto-Check Rápido)</h2>
+                <p style="margin-bottom: 15px; color: #666;">Marque o que <strong>já consegue fazer consistentemente</strong> — não "já fez uma vez".</p>
+                
+                <div class="card-grid">
+                    <div class="card">
+                        <h3>🌱 Early Game Checklist</h3>
+                        <ul class="checklist" id="checklist-early">
+                            <li data-gate="early1">Entendo ~50% do 6 Minute English sem legenda</li>
+                            <li data-gate="early2">Pronuncio TH (think/this), R (red/car), vowels (ship/sheep) reconhecidamente</li>
+                            <li data-gate="early3">Tenho 100+ cards no Anki com áudio e reviso 4+ dias/semana</li>
+                            <li data-gate="early4">Faço shadowing 10 min/dia dos áudios 1-2 do hub</li>
+                            <li data-gate="early5">Conjugação básica (presente/passado/futuro/perfeito) no automático</li>
+                        </ul>
+                        <div class="progress-bar" style="margin-top: 10px;"><div class="progress-fill" id="early-progress" style="width: 0%; background: #28a745;"></div></div>
+                        <small id="early-count">0/5</small>
+                    </div>
+
+                    <div class="card">
+                        <h3>⚔️ Mid Game Checklist</h3>
+                        <ul class="checklist" id="checklist-mid">
+                            <li data-gate="mid1">Entendo ≥ 70% do 6 Minute English sem legenda</li>
+                            <li data-gate="mid2">Ditado 1 min (VOA/BBC) com ≤ 3 erros</li>
+                            <li data-gate="mid3">Shadowing áudios 3-8 a 1.0x sem travar (2 min contínuos)</li>
+                            <li data-gate="mid4">Escrevo 2 textos/semana + correção IA (prompt do hub)</li>
+                            <li data-gate="mid5">Conversa 10 min com IA (prompt guiado) sem travar >3x/min</li>
+                        </ul>
+                        <div class="progress-bar" style="margin-top: 10px;"><div class="progress-fill" id="mid-progress" style="width: 0%; background: #ffc107;"></div></div>
+                        <small id="mid-count">0/5</small>
+                    </div>
+
+                    <div class="card">
+                        <h3>🏆 End Game Checklist</h3>
+                        <ul class="checklist" id="checklist-end">
+                            <li data-gate="end1">Conversa 20 min espontânea (IA/humanos) fluida</li>
+                            <li data-gate="end2">Assisto série/filme só legenda EN e entendo 85%+</li>
+                            <li data-gate="end3">Faço simulação entrevista/apresentação (prompt hub) nota ≥ 8/10</li>
+                            <li data-gate="end4">Escrevo emails/relatórios reais em inglês sem travar</li>
+                            <li data-gate="end5">Mantenho rotina: Anki + 1 shadowing + 1 conversa/semana</li>
+                        </ul>
+                        <div class="progress-bar" style="margin-top: 10px;"><div class="progress-fill" id="end-progress" style="width: 0%; background: #667eea;"></div></div>
+                        <small id="end-count">0/5</small>
+                    </div>
+                </div>
+
+                <div style="margin-top: 20px; text-align: center;">
+                    <button class="btn btn-primary" onclick="savePhaseChecklists()">💾 Salvar Meu Fase Atual</button>
+                    <button class="btn btn-secondary" onclick="resetPhaseChecklists()">🔄 Resetar Checklists</button>
+                </div>
+
+                <div id="phase-result" style="margin-top: 20px; padding: 15px; border-radius: 10px; display: none;"></div>
+            </div>
+
+            <!-- GATE TESTS (Botões de Ação) -->
+            <div class="section">
+                <h2>🧪 Testes de Gate (Faça Quando Se Sentir Pronto)</h2>
+                <p style="margin-bottom: 15px; color: #666;">Cada botão abre a ferramenta exata pra testar o critério. Registre o resultado no log abaixo.</p>
+
+                <div class="card-grid">
+                    <div class="card">
+                        <h3>🎧 Gate Early→Mid: Listening Real</h3>
+                        <p>Teste: Entende ≥ 70% sem legenda?</p>
+                        <a href="https://www.bbc.co.uk/learningenglish/english/features/6-minute-english" target="_blank" class="btn btn-primary" style="margin-bottom: 8px;">▶ Abrir 6 Minute English (Nova Aba)</a>
+                        <br><br>
+                        <button class="btn btn-secondary" onclick="openDictationTest()">📝 Abrir Ditado 1 Min (VOA)</button>
+                        <small style="display:block; margin-top:8px; color:#666;">Dica: Ouça 1x sem ver texto → escreva → compare → conte erros</small>
+                    </div>
+
+                    <div class="card">
+                        <h3>🗣️ Gate Mid→End: Shadowing Fluido</h3>
+                        <p>Teste: 2 min a 1.0x sem travar (áudios 3-8)</p>
+                        <div style="margin-bottom: 10px;">
+                            <label style="font-weight:600; display:block; margin-bottom:5px;">Escolha áudio:</label>
+                            <select id="shadowing-audio" style="width:100%; padding:8px; border:1px solid #ddd; border-radius:6px;">
+                                <option value="audio3-text">☕ Áudio 3: Pedindo Café</option>
+                                <option value="audio4-text">✈️ Áudio 4: Check-in Aeroporto</option>
+                                <option value="audio5-text">💼 Áudio 5: Entrevista Emprego</option>
+                                <option value="audio6-text">🏠 Áudio 6: Descrevendo Casa</option>
+                                <option value="audio7-text">🛒 Áudio 7: Supermercado</option>
+                                <option value="audio8-text">🌤️ Áudio 8: Small Talk</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary" onclick="startShadowingTest()">▶ Iniciar Teste Shadowing (2 min)</button>
+                        <small style="display:block; margin-top:8px; color:#666;">Grave com Win+H → compare com original → conte travamentos</small>
+                    </div>
+
+                    <div class="card">
+                        <h3>💬 Gate Mid→End: Conversa IA 10 Min</h3>
+                        <p>Teste: Flui sem travar >3x/min?</p>
+                        <div class="prompt-box" style="margin-bottom: 10px;">
+                            <div class="prompt-header"><span class="prompt-label">Prompt Pronto</span></div>
+                            <code id="conv-prompt">Vamos praticar conversação sobre [TEMA: viagens / trabalho / hobbies / tecnologia / saúde]. Regras: (1) Você fala uma frase, eu respondo. (2) Corrija APENAS erros graves no final de cada minha resposta. (3) Se eu travar, dê uma dica sutil. (4) A cada 5 trocas, sugira vocabulário mais rico. Comece você com uma pergunta aberta.</code>
+                            <button class="btn btn-copy" onclick="copyPrompt(this)">📋 Copiar Prompt</button>
+                        </div>
+                        <a href="https://chat.openai.com" target="_blank" class="btn btn-primary" style="margin-right: 8px;">🤖 Abrir ChatGPT Voice</a>
+                        <a href="https://gemini.google.com" target="_blank" class="btn btn-secondary">💎 Abrir Gemini Live</a>
+                    </div>
+
+                    <div class="card">
+                        <h3>🎭 End Game: Simulação Real</h3>
+                        <p>Teste: Entrevista / Apresentação / Reunião</p>
+                        <div class="prompt-box" style="margin-bottom: 10px;">
+                            <div class="prompt-header"><span class="prompt-label">Prompt Pronto</span></div>
+                            <code id="sim-prompt">Simule uma [ENTREVISTA DE EMPREGO / PROVA TOEFL/IELTS SPEAKING / APRESENTAÇÃO] para nível B2. Faça 5-7 perguntas uma por vez. Eu respondo. Após cada resposta, dê: (1) nota 1-10, (2) 1 ponto forte, (3) 1 melhoria específica, (4) versão aprimorada da minha resposta. No final, resumo geral + plano de ação.</code>
+                            <button class="btn btn-copy" onclick="copyPrompt(this)">📋 Copiar Prompt</button>
+                        </div>
+                        <a href="https://chat.openai.com" target="_blank" class="btn btn-primary">🤖 Abrir ChatGPT Voice</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- COMBAT LOG / ATTEMPT HISTORY -->
+            <div class="section">
+                <h2>📜 Combat Log — Histórico de Tentativas de Gate</h2>
+                <p style="margin-bottom: 15px; color: #666;">Registre cada tentativa (sucesso ou falha). Padrão = progresso. Falha = dado pra ajustar grind.</p>
+
+                <div class="card" style="max-width: 800px;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 10px; margin-bottom: 15px; align-items: end;">
+                        <div>
+                            <label style="display:block; margin-bottom:4px; font-weight:600; font-size:0.85rem;">Gate Testado</label>
+                            <select id="log-gate" style="width:100%; padding:8px; border:1px solid #ddd; border-radius:6px;">
+                                <option value="early-mid-listening">Early→Mid: Listening 70% / Ditado</option>
+                                <option value="early-mid-pronunciation">Early→Mid: Pronúncia Core</option>
+                                <option value="mid-end-shadowing">Mid→End: Shadowing 2min 1.0x</option>
+                                <option value="mid-end-conversation">Mid→End: Conversa IA 10min</option>
+                                <option value="end-simulation">End Game: Simulação Entrevista/Apresentação</option>
+                                <option value="other">Outro</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="display:block; margin-bottom:4px; font-weight:600; font-size:0.85rem;">Resultado</label>
+                            <select id="log-result" style="width:100%; padding:8px; border:1px solid #ddd; border-radius:6px;">
+                                <option value="pass">✅ Passou (critério atingido)</option>
+                                <option value="partial">⚠️ Parcial (quase lá)</option>
+                                <option value="fail">❌ Falhou (precisa mais grind)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="display:block; margin-bottom:4px; font-weight:600; font-size:0.85rem;">Detalhe / Score</label>
+                            <input type="text" id="log-detail" placeholder="Ex: 72% listening / 2 erros ditado / 4 travamentos" style="width:100%; padding:8px; border:1px solid #ddd; border-radius:6px;">
+                        </div>
+                        <button class="btn btn-primary" onclick="saveGateLog()" style="height: 38px;">📝 Registrar</button>
+                    </div>
+
+                    <div id="gate-log-history" style="max-height: 300px; overflow-y: auto;">
+                        <p style="color:#999; text-align:center; padding:20px;">Nenhum registro ainda. Faça um teste e registre acima.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ANTI-PERFECTIONISM REMINDER -->
+            <div class="section">
+                <h2>🧠 Lembretes Anti-Paralisia (Leia Semanalmente)</h2>
+                <div class="card-grid">
+                    <div class="card" style="background: #fff3e0; border-left: 4px solid #ff9800;">
+                        <h3>⚠️ "Perfeito é inimigo do feito"</h3>
+                        <ul style="padding-left: 20px; line-height: 1.8; color: #555;">
+                            <li>Gate = <strong>mínimo viável</strong>, não nota 10</li>
+                            <li>Se passou no gate → <strong>avança</strong>. Não fica polindo early game pra sempre</li>
+                            <li>Gaps aparecem no mid/end game → <strong>volta e grinda ponto específico</strong> (não tudo)</li>
+                        </ul>
+                    </div>
+                    <div class="card" style="background: #e8f5e9; border-left: 4px solid #28a745;">
+                        <h3>✅ "Entendimento > Perfeição"</h3>
+                        <ul style="padding-left: 20px; line-height: 1.8; color: #555;">
+                            <li>Se entendeu a mensagem → <strong>comunicação aconteceu</strong></li>
+                            <li>Erro de gramática/vocab que não impede sentido = <strong>aceitável no mid game</strong></li>
+                            <li>Correção vem com <strong>exposição + feedback</strong>, não estudo teórico isolado</li>
+                        </ul>
+                    </div>
+                    <div class="card" style="background: #fce4ec; border-left: 4px solid #e91e63;">
+                        <h3>🚫 "Procrastinação disfarçada de preparação"</h3>
+                        <ul style="padding-left: 20px; line-height: 1.8; color: #555;">
+                            <li>"Vou falar quando souber mais palavras" = <strong>nunca vai falar</strong></li>
+                            <li>"Preciso terminar esse curso antes" = <strong>curso não tem fim</strong></li>
+                            <li>Ação imperfeita hoje > ação perfeita "amanhã"</li>
+                        </ul>
+                    </div>
+                    <div class="card" style="background: #eef0f7; border-left: 4px solid #667eea;">
+                        <h3>🔄 Seu Loop de Progresso Real</h3>
+                        <ol style="padding-left: 20px; line-height: 1.8; color: #555;">
+                            <li><strong>Testa gate</strong> (botões acima)</li>
+                            <li><strong>Registra no log</strong> (honesto: passou/parcial/falhou)</li>
+                            <li><strong>Se passou:</strong> Avança fase → novo checklist</li>
+                            <li><strong>Se falhou/parcial:</strong> Identifica <strong>1 coisa só</strong> pra grindar esta semana</li>
+                            <li><strong>Repete</strong> na semana seguinte</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GALERIA / LOG UNIFICADO -->
+        <div class="tab-content" id="tab-logs">
+            <div class="section">
+                <h2>📜 Galeria & Log Unificado — Todo Seu Progresso</h2>
+                <p style="margin-bottom: 20px; color: var(--text-muted);">Histórico completo de tudo que você fez: checklists, métricas, gate tests, textos, áudios, autoavaliações. Filtre, busque, exporte.</p>
+
+                <!-- Filter Bar -->
+                <div class="card" style="margin-bottom: 20px; padding: 20px;">
+                    <h3 style="margin-bottom: 16px;">🔍 Filtros & Relatórios</h3>
+                    <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: end; margin-bottom: 16px;">
+                        <div style="flex: 1; min-width: 200px;">
+                            <label style="display:block; margin-bottom:4px; font-weight:600; font-size:0.85rem;">Tipo de Atividade</label>
+                            <select id="log-filter-type" style="width:100%; padding:10px; border:1px solid var(--border-color); border-radius:8px; background: var(--input-bg); color: var(--text-primary);">
+                                <option value="all">📋 Todos</option>
+                                <option value="checklist">✅ Checklist Semanal</option>
+                                <option value="metrics">📊 Métricas Semanais</option>
+                                <option value="gate">🧪 Gate Tests</option>
+                                <option value="writing">✍️ Writing Practice</option>
+                                <option value="audio">🎵 Áudios Gerados</option>
+                                <option value="self-assessment">📝 Autoavaliação Mensal</option>
+                                <option value="phase">🎮 Mudança de Fase RPG</option>
+                            </select>
+                        </div>
+                        <div style="flex: 1; min-width: 150px;">
+                            <label style="display:block; margin-bottom:4px; font-weight:600; font-size:0.85rem;">Período</label>
+                            <select id="log-filter-period" style="width:100%; padding:10px; border:1px solid var(--border-color); border-radius:8px; background: var(--input-bg); color: var(--text-primary);">
+                                <option value="all">📅 Todo o histórico</option>
+                                <option value="week">🗓️ Esta semana</option>
+                                <option value="month">📆 Este mês</option>
+                                <option value="last-month">📆 Mês passado</option>
+                            </select>
+                        </div>
+                        <div style="flex: 1; min-width: 150px;">
+                            <label style="display:block; margin-bottom:4px; font-weight:600; font-size:0.85rem;">Status</label>
+                            <select id="log-filter-status" style="width:100%; padding:10px; border:1px solid var(--border-color); border-radius:8px; background: var(--input-bg); color: var(--text-primary);">
+                                <option value="all">Todos</option>
+                                <option value="completed">✅ Concluído</option>
+                                <option value="partial">⚠️ Parcial</option>
+                                <option value="pending">⏳ Pendente</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-secondary" onclick="applyLogFilters()" style="padding: 10px 20px;">🔍 Filtrar</button>
+                        <button class="btn btn-primary" onclick="exportLogReport()" style="padding: 10px 20px;">📄 Exportar Relatório (PDF/MD)</button>
+                    </div>
+
+                    <!-- Reports Folder & Drag-Drop -->
+                    <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center; padding-top: 16px; border-top: 1px solid var(--border-color);">
+                        <button class="btn btn-secondary" onclick="openReportsFolder()" style="padding: 10px 20px;">
+                            📂 Abrir pasta <code>reports/</code>
+                        </button>
+                        <span style="color: var(--text-muted); font-size: 0.85rem; flex: 1;">
+                            Salve seus <code>.md</code> na pasta <strong>reports/</strong> → depois arraste aqui para visualizar formatado
+                        </span>
+                    </div>
+
+                    <!-- Drag & Drop Zone for .md files -->
+                    <div id="md-drop-zone" style="margin-top: 16px; padding: 24px; border: 2px dashed var(--border-color); border-radius: 12px; text-align: center; background: var(--bg-secondary); transition: all 0.2s; cursor: pointer;">
+                        <div style="font-size: 3rem; margin-bottom: 12px;">📄</div>
+                        <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 4px;">Arraste arquivos <code>.md</code> aqui</div>
+                        <div style="color: var(--text-muted); font-size: 0.9rem;">ou clique para selecionar</div>
+                        <input type="file" id="md-file-input" accept=".md,.markdown" style="display: none;" multiple>
+                    </div>
+
+                    <!-- Rendered Markdown Viewer -->
+                    <div id="md-viewer" style="display: none; margin-top: 20px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border-color);">
+                            <h3 style="margin: 0;">📖 Visualizador de Relatório</h3>
+                            <button class="btn btn-secondary" onclick="closeMdViewer()" style="padding: 6px 12px; font-size: 0.85rem;">✕ Fechar</button>
+                        </div>
+                        <div id="md-content" style="max-height: 70vh; overflow-y: auto; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 24px; line-height: 1.7;"></div>
+                    </div>
+                </div>
+
+                <!-- Log Entries -->
+                <div id="unified-log-container" style="max-height: 70vh; overflow-y: auto;">
+                    <div style="text-align: center; padding: 40px; color: var(--text-muted);">
+                        <div style="font-size: 3rem; margin-bottom: 16px;">📜</div>
+                        <p style="font-size: 1.1rem;">Carregando seu histórico...</p>
+                    </div>
+                </div>
+
+                <!-- Stats Summary -->
+                <div class="card" style="margin-top: 20px; display: none;" id="log-summary-card">
+                    <h3>📈 Resumo do Período Filtrado</h3>
+                    <div class="card-grid" id="log-summary-grid">
+                        <!-- Preenchido via JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        console.log('🚀 English Study Hub: Script started');
+        
+        // Global error handler
+        window.addEventListener('error', (e) => {
+            console.error('💥 Global error:', e.message, 'at', e.filename, ':', e.lineno, ':', e.colno);
+        });
+        
+        window.addEventListener('unhandledrejection', (e) => {
+            console.error('💥 Unhandled promise rejection:', e.reason);
+        });
+        
+        console.log('🔧 DOM ready check:', document.readyState);
+        
+        // Simple tab switching - make first tab active by default
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                const targetId = 'tab-' + tab.dataset.tab;
+                const targetContent = document.getElementById(targetId);
+                if (targetContent) targetContent.classList.add('active');
+            });
+        });
+        
+        // Activate first tab by default
+        document.querySelectorAll('.nav-tab')[0]?.click();
+        
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                const html = document.documentElement;
+                const currentTheme = html.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                html.setAttribute('data-theme', newTheme);
+                safeSetItem('theme', newTheme);
+                const icon = document.getElementById('themeIcon');
+                if (icon) icon.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+            });
+        }
+        
+        // Safe localStorage wrapper for file:// protocol compatibility
+        function safeGetItem(key) {
+            try { return localStorage.getItem(key); } catch (e) { return null; }
+        }
+        function safeSetItem(key, value) {
+            try { localStorage.setItem(key, value); } catch (e) { console.warn('localStorage unavailable:', e); }
+        }
+        function safeRemoveItem(key) {
+            try { localStorage.removeItem(key); } catch (e) { console.warn('localStorage unavailable:', e); }
+        }
+        
+        // Set theme from localStorage if available
+        const savedTheme = safeGetItem('theme');
+        if (savedTheme) {
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            const icon = document.getElementById('themeIcon');
+            if (icon) icon.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+        }
+        
+        // Initialize checklists
+        function initChecklists() {
+            // Weekly checklist item clicks
+            const checklistItems = document.querySelectorAll('#weekly-checklist li');
+            checklistItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    item.classList.toggle('done');
+                    saveChecklist();
+                });
+            });
+            
+            // Load saved checklist state
+            checklistItems.forEach(item => {
+                const saved = safeGetItem('checklist-' + item.dataset.day);
+                if (saved === 'true') item.classList.add('done');
+            });
+        }
+        
+        // init function called by runInit()
+        function init() {
+            initChecklists();
+            updateNextAction();
+        }
+        
+        // Save checklist
+        function saveChecklist() {
+            const checklistItems = document.querySelectorAll('#weekly-checklist li');
+            let allDone = true;
+            checklistItems.forEach(item => {
+                const isDone = item.classList.contains('done');
+                safeSetItem('checklist-' + item.dataset.day, isDone);
+                if (!isDone) allDone = false;
+            });
+            // Show feedback
+            const nextActionTitle = document.getElementById('next-action-title');
+            if (allDone && nextActionTitle) {
+                nextActionTitle.textContent = '✅ Semana Completa!';
+            }
+        }
+        
+        // Reset checklist
+        function resetChecklist() {
+            if (confirm('Resetar checklist da semana?')) {
+                const checklistItems = document.querySelectorAll('#weekly-checklist li');
+                checklistItems.forEach(item => {
+                    item.classList.remove('done');
+                    safeRemoveItem('checklist-' + item.dataset.day);
+                });
+                updateNextAction();
+            }
+        }
+
+        // ===== COPIAR PROMPTS/TEXTOS =====
+        function copyPrompt(btn) {
+            const code = btn.parentElement.querySelector('code');
+            navigator.clipboard.writeText(code.innerText).then(() => {
+                btn.textContent = '✅ Copiado!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = '📋 Copiar';
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        function copyText(elementId, btn) {
+            const text = document.getElementById(elementId).innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                btn.textContent = '✅ Copiado!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = '📋 Copiar Texto';
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        // ===== MÉTRICAS SEMANAIS =====
+        function saveMetrics() {
+            const metrics = {
+                date: new Date().toISOString().split('T')[0],
+                anki: document.getElementById('metric-anki').value,
+                listening: document.getElementById('metric-listening').value,
+                speaking: document.getElementById('metric-speaking').value,
+                writing: document.getElementById('metric-writing').value,
+                quiz: document.getElementById('metric-quiz').value
+            };
+            let history = JSON.parse(safeGetItem('metrics-history') || '[]');
+            history.unshift(metrics);
+            if (history.length > 8) history = history.slice(0, 8);
+            safeSetItem('metrics-history', JSON.stringify(history));
+            renderMetricsHistory();
+            updateGoalBars();
+            alert('📊 Métricas salvas!');
+        }
+
+        function renderMetricsHistory() {
+            const history = JSON.parse(safeGetItem('metrics-history') || '[]');
+            const container = document.getElementById('metrics-history');
+            if (history.length === 0) {
+                container.innerHTML = '<p style="color:#999; text-align:center; padding:20px;">Nenhum dado salvo ainda.</p>';
+                return;
+            }
+            container.innerHTML = history.map(m => `
+                <div style="background:#f8f9fa; border:1px solid #e9ecef; border-radius:8px; padding:15px; margin-bottom:10px;">
+                    <strong>${m.date}</strong> | 
+                    Anki: ${m.anki} | 
+                    Listening: ${m.listening}min | 
+                    Speaking: ${m.speaking}min | 
+                    Writing: ${m.writing} | 
+                    Quiz: ${m.quiz}%
+                </div>
+            `).join('');
+        }
+
+        function updateGoalBars() {
+            const history = JSON.parse(safeGetItem('metrics-history') || '[]');
+            if (history.length === 0) return;
+            const latest = history[0];
+            // Metas mensais aproximadas (4 semanas)
+            const goals = {
+                vocab: { current: parseInt(latest.anki) * 4, target: 100 },
+                listening: { current: parseInt(latest.listening) * 4, target: 300 },
+                speaking: { current: parseInt(latest.speaking) * 4, target: 180 },
+                writing: { current: parseInt(latest.writing) * 4, target: 8 },
+                grammar: { current: 4, target: 4 }, // 1 tópico/semana
+                consistency: { current: 5, target: 5 }
+            };
+            Object.keys(goals).forEach(key => {
+                const bar = document.getElementById('goal-' + key);
+                if (bar) {
+                    const pct = Math.min(100, (goals[key].current / goals[key].target) * 100);
+                    bar.style.width = pct + '%';
+                }
+            });
+        }
+
+        // ===== AUTOAVALIAÇÃO MENSAL =====
+        function saveSelfAssessment() {
+            const data = {
+                date: new Date().toISOString().split('T')[0],
+                listen: document.getElementById('self-listen').value,
+                speak: document.getElementById('self-speak').value,
+                write: document.getElementById('self-write').value,
+                grammar: document.getElementById('self-grammar').value,
+                struggles: document.getElementById('self-struggles').value,
+                focus: document.getElementById('self-focus').value
+            };
+            let history = JSON.parse(safeGetItem('self-assessment-history') || '[]');
+            history.unshift(data);
+            safeSetItem('self-assessment-history', JSON.stringify(history));
+            alert('📝 Autoavaliação salva! Compare no próximo mês.');
+        }
+
+        // ===== INICIALIZAÇÃO (executa imediatamente - script no final do body) =====
+        let initDone = false;
+        
+        function runInit() {
+            console.log('🏁 runInit() started');
+            if (initDone) {
+                console.log('⚠️ initDone already true, skipping');
+                return;
+            }
+            initDone = true;
+            console.log('✅ initDone set to true');
+            
+            try {
+                console.log('🏁 Calling init()...');
+                init();
+                console.log('✅ init() done');
+            } catch (e) { console.warn('Init error:', e); }
+            
+            // Existing code continues...
+            try {
+                console.log('📊 Calling renderMetricsHistory...');
+                renderMetricsHistory();
+                console.log('✅ renderMetricsHistory done');
+                console.log('📊 Calling updateGoalBars...');
+                updateGoalBars();
+                console.log('✅ updateGoalBars done');
+            } catch (e) { console.warn('Metrics init error:', e); }
+            
+            // Carregar autoavaliação anterior se existir
+            try {
+                console.log('📝 Loading self-assessment...');
+                const selfHistory = JSON.parse(safeGetItem('self-assessment-history') || '[]');
+                if (selfHistory.length > 0) {
+                    const last = selfHistory[0];
+                    document.getElementById('self-listen').value = last.listen;
+                    document.getElementById('val-listen').textContent = last.listen;
+                    document.getElementById('self-speak').value = last.speak;
+                    document.getElementById('val-speak').textContent = last.speak;
+                    document.getElementById('self-write').value = last.write;
+                    document.getElementById('val-write').textContent = last.write;
+                    document.getElementById('self-grammar').value = last.grammar;
+                    document.getElementById('val-grammar').textContent = last.grammar;
+                    document.getElementById('self-struggles').value = last.struggles;
+                    document.getElementById('self-focus').value = last.focus;
+                }
+                console.log('✅ Self-assessment loaded');
+            } catch (e) { console.warn('Self-assessment init error:', e); }
+            
+            // RPG Progression: load checklists and gate log
+            try {
+                console.log('🎮 Loading RPG phase checklists...');
+                loadPhaseChecklists();
+                console.log('✅ Phase checklists loaded');
+                console.log('📜 Rendering gate log history...');
+                renderGateLogHistory();
+                console.log('✅ Gate log history rendered');
+            } catch (e) { console.warn('RPG init error:', e); }
+            
+            // Add click listeners for phase checklists
+            try {
+                console.log('🖱️ Adding phase checklist listeners...');
+                ['early', 'mid', 'end'].forEach(phase => {
+                    document.querySelectorAll(`#checklist-${phase} li`).forEach(item => {
+                        item.addEventListener('click', () => {
+                            item.classList.toggle('done');
+                            updatePhaseProgress();
+                        });
+                    });
+                });
+                console.log('✅ Phase checklist listeners added');
+            } catch (e) { console.warn('Phase checklist listeners error:', e); }
+            
+            // Update top bar initially (deferred slightly to let DOM settle)
+            console.log('⏰ Scheduling updateTopBar in 100ms...');
+            setTimeout(() => {
+                try {
+                    console.log('📊 Calling updateTopBar...');
+                    updateTopBar();
+                    console.log('✅ updateTopBar done');
+                    setInterval(() => { try { updateTopBar(); } catch (e) { console.warn('TopBar interval error:', e); } }, 30000);
+                } catch (e) { console.warn('TopBar init error:', e); }
+            }, 100);
+            
+            // Load unified log when logs tab is activated
+            try {
+                console.log('📜 Adding logs tab listener...');
+                const logsTab = document.querySelector('.nav-tab[data-tab="logs"]');
+                if (logsTab) {
+                    logsTab.addEventListener('click', () => {
+                        setTimeout(() => { try { loadUnifiedLog(); } catch (e) { console.warn('loadUnifiedLog error:', e); } }, 100);
+                    });
+                    console.log('✅ Logs tab listener added');
+                } else {
+                    console.warn('⚠️ Logs tab not found');
+                }
+            } catch (e) { console.warn('Logs tab listener error:', e); }
+            
+            console.log('🏁 runInit() completed');
+        }
+
+        // ===== TAB SWITCHING HELPER (must be defined before runInit) =====
+        function switchTab(tabName) {
+            console.log('🔀 switchTab called:', tabName);
+            const tab = document.querySelector(`.nav-tab[data-tab="${tabName}"]`);
+            if (tab) {
+                tab.click();
+                console.log('✅ Tab switched to:', tabName);
+            } else {
+                console.warn('⚠️ Tab not found:', tabName);
+            }
+        }
+
+        console.log('🚀 Calling runInit()...');
+        runInit();
+        console.log('✅ runInit() returned');
+
+        // ===== TECLAS DE ATALHO =====
+        const tabs = document.querySelectorAll('.nav-tab');
+        document.addEventListener('keydown', (e) => {
+            // Alt + 1-9, 0 para trocar abas (temos 10 abas: 1-9, 0=10ª)
+            if (e.altKey && e.key >= '1' && e.key <= '9') {
+                e.preventDefault();
+                const idx = parseInt(e.key) - 1;
+                if (tabs[idx]) tabs[idx].click();
+            } else if (e.altKey && e.key === '0') {
+                e.preventDefault();
+                if (tabs[9]) tabs[9].click(); // 10ª aba (índice 9)
+            }
+        });
+
+        // ===== RPG PROGRESSION FUNCTIONS =====
+        
+        // Phase Checklists
+        function updatePhaseProgress() {
+            ['early', 'mid', 'end'].forEach(phase => {
+                const items = document.querySelectorAll(`#checklist-${phase} li`);
+                let checked = 0;
+                items.forEach(item => {
+                    if (item.classList.contains('done')) checked++;
+                });
+                const pct = (checked / items.length) * 100;
+                document.getElementById(`${phase}-progress`).style.width = pct + '%';
+                document.getElementById(`${phase}-count`).textContent = `${checked}/${items.length}`;
+            });
+            
+            // Auto-determine current phase
+            const earlyDone = document.querySelectorAll('#checklist-early li.done').length;
+            const midDone = document.querySelectorAll('#checklist-mid li.done').length;
+            const endDone = document.querySelectorAll('#checklist-end li.done').length;
+            
+            let currentPhase = 'early';
+            let message = '';
+            let bgColor = '';
+            
+            if (earlyDone === 5 && midDone < 5) {
+                currentPhase = 'mid';
+                message = '⚔️ <strong>Fase Atual: MID GAME</strong> — Você tem base sólida! Foque em automatizar (shadowing, writing, conversa guiada).';
+                bgColor = '#fff8e1';
+            } else if (earlyDone === 5 && midDone === 5 && endDone < 5) {
+                currentPhase = 'end';
+                message = '🏆 <strong>Fase Atual: END GAME</strong> — Fluência funcional! Pratique conversação livre, simulações, consumo nativo.';
+                bgColor = '#eef0f7';
+            } else if (endDone === 5) {
+                currentPhase = 'master';
+                message = '🌟 <strong>MASTERY</strong> — Inglês é ferramenta diária. Mantenha: Anki + 1 shadowing + 1 conversa/semana.';
+                bgColor = '#e8f5e9';
+            } else {
+                message = '🌱 <strong>Fase Atual: EARLY GAME</strong> — Grinde listening massivo, fonética core, vocabulário base, shadowing controlado.';
+                bgColor = '#e8f5e9';
+            }
+            
+            const resultDiv = document.getElementById('phase-result');
+            resultDiv.style.display = 'block';
+            resultDiv.style.background = bgColor;
+            resultDiv.style.borderLeft = `4px solid ${currentPhase === 'early' ? '#28a745' : currentPhase === 'mid' ? '#ffc107' : currentPhase === 'end' ? '#667eea' : '#28a745'}`;
+            resultDiv.innerHTML = message;
+        }
+
+        // Load phase checklists from localStorage
+        function loadPhaseChecklists() {
+            ['early', 'mid', 'end'].forEach(phase => {
+                const items = document.querySelectorAll(`#checklist-${phase} li`);
+                items.forEach(item => {
+                    const saved = safeGetItem(`phase-${phase}-${item.dataset.gate}`);
+                    if (saved === 'true') item.classList.add('done');
+                });
+            });
+            updatePhaseProgress();
+        }
+
+        function savePhaseChecklists() {
+            ['early', 'mid', 'end'].forEach(phase => {
+                const items = document.querySelectorAll(`#checklist-${phase} li`);
+                items.forEach(item => {
+                    safeSetItem(`phase-${phase}-${item.dataset.gate}`, item.classList.contains('done'));
+                });
+            });
+            updatePhaseProgress();
+            alert('💾 Fase salva! Veja seu progresso acima.');
+        }
+
+        function resetPhaseChecklists() {
+            if (confirm('Resetar TODOS os checklists de fase?')) {
+                ['early', 'mid', 'end'].forEach(phase => {
+                    const items = document.querySelectorAll(`#checklist-${phase} li`);
+                    items.forEach(item => {
+                        item.classList.remove('done');
+                        safeRemoveItem(`phase-${phase}-${item.dataset.gate}`);
+                    });
+                });
+                updatePhaseProgress();
+                document.getElementById('phase-result').style.display = 'none';
+            }
+        }
+
+        // Gate Test Helpers
+        function openDictationTest() {
+            // Abre VOA Learning English para ditado
+            window.open('https://learningenglish.voanews.com/z/4810', '_blank');
+        }
+
+        function startShadowingTest() {
+            const select = document.getElementById('shadowing-audio');
+            const audioId = select.value;
+            const text = document.getElementById(audioId).innerText;
+            
+            // Cria modal simples para o teste
+            const modal = document.createElement('div');
+            modal.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:10000;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:inherit;';
+            modal.innerHTML = `
+                <div style="background:white;padding:30px;border-radius:16px;max-width:700px;width:90%;max-height:80vh;overflow:auto;">
+                    <h2 style="margin-bottom:20px;color:#333;">🎯 Teste de Shadowing — 2 Minutos</h2>
+                    <p style="color:#666;margin-bottom:15px;"><strong>Instruções:</strong></p>
+                    <ol style="padding-left:20px;color:#555;line-height:1.8;margin-bottom:20px;">
+                        <li>Clique em "▶ Começar" → o texto aparecerá linha por linha</li>
+                        <li>Ouça mentalmente → repita <strong>junto</strong> (shadowing) imitando velocidade/entonação</li>
+                        <li>Use <strong>Win+H</strong> para gravar sua voz</li>
+                        <li>Após 2 min, pare → compare com original → conte travamentos</li>
+                    </ol>
+                    <div id="shadowing-text" style="background:#f8f9fa;padding:20px;border-radius:8px;margin-bottom:20px;min-height:200px;line-height:1.8;color:#333;white-space:pre-wrap;">Clique em "▶ Começar" para iniciar...</div>
+                    <div style="display:flex;gap:10px;justify-content:center;">
+                        <button id="start-shadowing" class="btn btn-primary" style="padding:12px 30px;">▶ Começar (2 min)</button>
+                        <button id="stop-shadowing" class="btn btn-secondary" style="padding:12px 30px;" disabled>⏹ Parar</button>
+                    </div>
+                    <p style="margin-top:15px;color:#666;font-size:0.9rem;">Dica: Foque em <strong>fluidez</strong>, não perfeição. Travou? Continue. O objetivo é 2 min contínuos a 1.0x.</p>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            
+            const textDiv = modal.querySelector('#shadowing-text');
+            const startBtn = modal.querySelector('#start-shadowing');
+            const stopBtn = modal.querySelector('#stop-shadowing');
+            
+            let lines = text.split('\n').filter(l => l.trim());
+            let currentLine = 0;
+            let interval = null;
+            let startTime = null;
+            
+            startBtn.onclick = () => {
+                startBtn.disabled = true;
+                stopBtn.disabled = false;
+                startTime = Date.now();
+                currentLine = 0;
+                
+                // Mostra primeira linha
+                textDiv.textContent = lines[0];
+                
+                // Avança linhas a cada ~3.5 segundos (ajuste para 2 min total)
+                const lineDuration = 120000 / lines.length; // 2 min total
+                interval = setInterval(() => {
+                    currentLine++;
+                    if (currentLine < lines.length) {
+                        textDiv.textContent = lines.slice(0, currentLine + 1).join('\n');
+                    } else {
+                        clearInterval(interval);
+                        finishTest();
+                    }
+                }, lineDuration);
+            };
+            
+            stopBtn.onclick = finishTest;
+            
+            function finishTest() {
+                clearInterval(interval);
+                const elapsed = Math.round((Date.now() - startTime) / 1000);
+                modal.querySelector('h2').textContent = `✅ Teste Concluído — ${elapsed}s`;
+                textDiv.innerHTML = `<strong>Tempo:</strong> ${elapsed}s<br><strong>Linhas:</strong> ${lines.length}<br><br>Agora: grave com <kbd style="background:#eee;padding:2px 6px;border-radius:4px;">Win+H</kbd> → compare → conte travamentos/pausas longas.<br><br><em>Critério Gate Mid→End: ≤ 3 travamentos em 2 min contínuos.</em>`;
+                startBtn.style.display = 'none';
+                stopBtn.textContent = 'Fechar';
+                stopBtn.disabled = false;
+                stopBtn.onclick = () => document.body.removeChild(modal);
+            }
+            
+            // ESC para fechar
+            const escHandler = (e) => { if (e.key === 'Escape') { document.body.removeChild(modal); document.removeEventListener('keydown', escHandler); }};
+            document.addEventListener('keydown', escHandler);
+        }
+
+        // Combat Log / Gate Attempt History
+        function saveGateLog() {
+            const gate = document.getElementById('log-gate').value;
+            const result = document.getElementById('log-result').value;
+            const detail = document.getElementById('log-detail').value;
+            
+            const entry = {
+                date: new Date().toISOString().split('T')[0],
+                time: new Date().toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'}),
+                gate,
+                result,
+                detail
+            };
+            
+            let history = JSON.parse(safeGetItem('gate-log-history') || '[]');
+            history.unshift(entry);
+            if (history.length > 20) history = history.slice(0, 20);
+            safeSetItem('gate-log-history', JSON.stringify(history));
+            
+            renderGateLogHistory();
+            
+            // Reset form
+            document.getElementById('log-detail').value = '';
+            alert('📝 Tentativa registrada no Combat Log!');
+        }
+
+        function renderGateLogHistory() {
+            const history = JSON.parse(safeGetItem('gate-log-history') || '[]');
+            const container = document.getElementById('gate-log-history');
+            
+            if (history.length === 0) {
+                container.innerHTML = '<p style="color:#999; text-align:center; padding:20px;">Nenhum registro ainda. Faça um teste e registre acima.</p>';
+                return;
+            }
+            
+            const resultIcons = { pass: '✅', partial: '⚠️', fail: '❌' };
+            const resultColors = { pass: '#28a745', partial: '#ffc107', fail: '#dc3545' };
+            const gateLabels = {
+                'early-mid-listening': 'Early→Mid: Listening/Ditado',
+                'early-mid-pronunciation': 'Early→Mid: Pronúncia',
+                'mid-end-shadowing': 'Mid→End: Shadowing',
+                'mid-end-conversation': 'Mid→End: Conversa IA',
+                'end-simulation': 'End Game: Simulação',
+                'other': 'Outro'
+            };
+            
+            container.innerHTML = history.map(entry => `
+                <div style="background:#f8f9fa; border:1px solid #e9ecef; border-radius:8px; padding:15px; margin-bottom:10px; border-left: 4px solid ${resultColors[entry.result]};">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                        <strong>${gateLabels[entry.gate] || entry.gate}</strong>
+                        <span style="background:${resultColors[entry.result]}; color:white; padding:2px 10px; border-radius:12px; font-size:0.75rem; font-weight:600;">
+                            ${resultIcons[entry.result]} ${entry.result.toUpperCase()}
+                        </span>
+                    </div>
+                    <div style="color:#666; font-size:0.85rem;">
+                        📅 ${entry.date} ${entry.time} ${entry.detail ? ' | ' + entry.detail : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ===== COMMAND CENTER & TOP BAR FUNCTIONS =====
+        
+        // Streak Calculation
+        function calculateStreak() {
+            const checklistKeys = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+            let streak = 0;
+            const today = new Date();
+            const todayDay = today.getDay(); // 0 = Sunday, 1 = Monday, etc.
+            const dayMap = {0: 'sun', 1: 'mon', 2: 'tue', 3: 'wed', 4: 'thu', 5: 'fri', 6: 'sat'};
+            
+            // Check from yesterday backwards
+            for (let i = 1; i <= 365; i++) {
+                const checkDate = new Date(today);
+                checkDate.setDate(today.getDate() - i);
+                const dayKey = dayMap[checkDate.getDay()];
+                const saved = safeGetItem('checklist-' + dayKey);
+                if (saved === 'true') {
+                    streak++;
+                } else {
+                    break;
+                }
+            }
+            return streak;
+        }
+        
+        // XP Calculation
+        function calculateWeeklyXP() {
+            let xp = 0;
+            // From metrics history
+            const metricsHistory = JSON.parse(safeGetItem('metrics-history') || '[]');
+            metricsHistory.forEach(m => {
+                xp += (parseInt(m.listening) || 0) * 0.5; // 0.5 XP per min listening
+                xp += (parseInt(m.speaking) || 0) * 1; // 1 XP per min speaking
+                xp += (parseInt(m.anki) || 0) * 2; // 2 XP per card
+                xp += (parseInt(m.writing) || 0) * 10; // 10 XP per writing
+                xp += (parseInt(m.quiz) || 0) * 0.2; // 0.2 XP per quiz %
+            });
+            // From gate logs (bonus)
+            const gateHistory = JSON.parse(safeGetItem('gate-log-history') || '[]');
+            gateHistory.forEach(g => {
+                if (g.result === 'pass') xp += 50;
+                else if (g.result === 'partial') xp += 20;
+            });
+            // From phase checklists
+            ['early', 'mid', 'end'].forEach(phase => {
+                document.querySelectorAll(`#checklist-${phase} li.done`).forEach(() => { xp += 5; });
+            });
+            return Math.floor(xp);
+        }
+        
+        function calculateLevel(xp) {
+            // Level formula: each level requires more XP
+            // Level 1: 0 XP, Level 2: 100 XP, Level 3: 300 XP, Level 4: 600 XP, etc.
+            let level = 1;
+            let required = 100;
+            let total = 0;
+            while (total + required <= xp) {
+                total += required;
+                level++;
+                required = Math.floor(required * 1.5);
+            }
+            return level;
+        }
+        
+        function getXPForNextLevel(currentLevel) {
+            let required = 100;
+            for (let i = 1; i < currentLevel; i++) {
+                required = Math.floor(required * 1.5);
+            }
+            return required;
+        }
+        
+        function getTotalXPForLevel(level) {
+            let total = 0;
+            let required = 100;
+            for (let i = 1; i < level; i++) {
+                total += required;
+                required = Math.floor(required * 1.5);
+            }
+            return total;
+        }
+        
+        // Phase Detection
+        function detectCurrentPhase() {
+            const earlyDone = document.querySelectorAll('#checklist-early li.done').length;
+            const midDone = document.querySelectorAll('#checklist-mid li.done').length;
+            const endDone = document.querySelectorAll('#checklist-end li.done').length;
+            
+            if (earlyDone === 5 && midDone === 5 && endDone === 5) return 'master';
+            if (earlyDone === 5 && midDone === 5) return 'end';
+            if (earlyDone === 5) return 'mid';
+            return 'early';
+        }
+        
+        function getPhaseInfo(phase) {
+            const phases = {
+                early: { icon: '🌱', text: 'Early Game', color: 'early', gradient: 'linear-gradient(135deg, #28a745, #20c997)' },
+                mid: { icon: '⚔️', text: 'Mid Game', color: 'mid', gradient: 'linear-gradient(135deg, #ffc107, #fd7e14)' },
+                end: { icon: '🏆', text: 'End Game', color: 'end', gradient: 'linear-gradient(135deg, #667eea, #764ba2)' },
+                master: { icon: '🌟', text: 'Mastery', color: 'master', gradient: 'linear-gradient(135deg, #28a745, #20c997)' }
+            };
+            return phases[phase] || phases.early;
+        }
+        
+        // Update Top Bar
+        function updateTopBar() {
+            try {
+                // Streak
+                const streak = calculateStreak();
+                const streakEl = document.getElementById('stat-streak');
+                if (streakEl) streakEl.textContent = streak;
+                
+                // XP
+                const xp = calculateWeeklyXP();
+                const xpEl = document.getElementById('stat-xp');
+                if (xpEl) xpEl.textContent = xp;
+                
+                // Level
+                const level = calculateLevel(xp);
+                const levelEl = document.getElementById('stat-level');
+                if (levelEl) levelEl.textContent = level;
+                
+                // Phase Badge
+                const phase = detectCurrentPhase();
+                const phaseInfo = getPhaseInfo(phase);
+                const badge = document.getElementById('phaseBadge');
+                const icon = document.getElementById('phaseIcon');
+                const text = document.getElementById('phaseText');
+                
+                if (badge) badge.className = 'phase-badge ' + phaseInfo.color;
+                if (icon) icon.textContent = phaseInfo.icon;
+                if (text) text.textContent = phaseInfo.text;
+                
+                // Alerts
+                updateAlerts();
+                
+                // Update Command Center if visible
+                const commandTab = document.getElementById('tab-command');
+                if (commandTab && commandTab.classList.contains('active')) {
+                    updateCommandCenter();
+                }
+            } catch (e) {
+                console.warn('updateTopBar error:', e);
+            }
+        }
+        
+        // Alerts System
+        function updateAlerts() {
+            const alerts = [];
+            const today = new Date();
+            const dayMap = {0: 'sun', 1: 'mon', 2: 'tue', 3: 'wed', 4: 'thu', 5: 'fri', 6: 'sat'};
+            
+            // Check streak break risk
+            const streak = calculateStreak();
+            const yesterdayKey = dayMap[(today.getDay() + 6) % 7];
+            if (streak > 0 && safeGetItem('checklist-' + yesterdayKey) !== 'true') {
+                alerts.push(`🔥 Streak de ${streak} dias em risco! Complete a tarefa de ontem.`);
+            }
+            
+            // Check DeepL quota (rough estimate)
+            const metricsHistory = JSON.parse(safeGetItem('metrics-history') || '[]');
+            if (metricsHistory.length > 0) {
+                const recentWriting = parseInt(metricsHistory[0].writing) || 0;
+                if (recentWriting > 3) {
+                    alerts.push(`🌐 Cota DeepL (~5k chars) pode estar acabando. Use Google Translate como fallback.`);
+                }
+            }
+            
+            // Check Anki review backlog
+            const ankiCards = parseInt(safeGetItem('anki-total-cards') || '0');
+            if (ankiCards > 50) {
+                alerts.push(`🃏 ${ankiCards} cards no Anki para revisar. Reserve 10 min hoje.`);
+            }
+            
+            // Check speaking practice
+            const recentSpeaking = metricsHistory.length > 0 ? parseInt(metricsHistory[0].speaking) || 0 : 0;
+            if (recentSpeaking < 15) {
+                alerts.push(`🗣️ Pouco speaking esta semana (${recentSpeaking} min). Tente 15+ min com IA.`);
+            }
+            
+            // Check gate readiness
+            const phase = detectCurrentPhase();
+            if (phase === 'early') {
+                const earlyDone = document.querySelectorAll('#checklist-early li.done').length;
+                if (earlyDone >= 4) {
+                    alerts.push(`🎯 Gate Early→Mid próximo! Teste seu listening no 6 Minute English.`);
+                }
+            } else if (phase === 'mid') {
+                const midDone = document.querySelectorAll('#checklist-mid li.done').length;
+                if (midDone >= 4) {
+                    alerts.push(`🎯 Gate Mid→End próximo! Teste shadowing 2 min ou conversa IA 10 min.`);
+                }
+            }
+            
+            const alertsContainer = document.getElementById('topBarAlerts');
+            const alertsText = document.getElementById('alert-text');
+            
+            if (alerts.length > 0) {
+                alertsContainer.classList.remove('hidden');
+                alertsText.textContent = alerts[0]; // Show first alert
+                // Rotate alerts every 5 seconds
+                if (window.alertRotationInterval) clearInterval(window.alertRotationInterval);
+                let alertIndex = 0;
+                window.alertRotationInterval = setInterval(() => {
+                    alertIndex = (alertIndex + 1) % alerts.length;
+                    alertsText.textContent = alerts[alertIndex];
+                }, 5000);
+            } else {
+                alertsContainer.classList.add('hidden');
+                if (window.alertRotationInterval) clearInterval(window.alertRotationInterval);
+            }
+        }
+        
+        // Command Center Updates
+        function updateCommandCenter() {
+            // Only run if Command Center tab is active and elements exist
+            const commandTab = document.getElementById('tab-command');
+            if (!commandTab || !commandTab.classList.contains('active')) {
+                return;
+            }
+            
+            try { updateGlobalProgress(); } catch (e) { console.warn('updateGlobalProgress error:', e); }
+            try { updateNextAction(); } catch (e) { console.warn('updateNextAction error:', e); }
+            try { updateAreaStatus(); } catch (e) { console.warn('updateAreaStatus error:', e); }
+            try { updateWeekQuickStats(); } catch (e) { console.warn('updateWeekQuickStats error:', e); }
+            try { updateUpcomingGates(); } catch (e) { console.warn('updateUpcomingGates error:', e); }
+            try { updateActiveAlertsList(); } catch (e) { console.warn('updateActiveAlertsList error:', e); }
+        }
+        
+        function updateGlobalProgress() {
+            // Calculate total tasks across all checklists
+            const weeklyItems = document.querySelectorAll('#weekly-checklist li');
+            const earlyItems = document.querySelectorAll('#checklist-early li');
+            const midItems = document.querySelectorAll('#checklist-mid li');
+            const endItems = document.querySelectorAll('#checklist-end li');
+            const allItems = [...weeklyItems, ...earlyItems, ...midItems, ...endItems];
+            
+            let completed = 0;
+            allItems.forEach(item => {
+                if (item.classList.contains('done')) completed++;
+            });
+            
+            const total = allItems.length;
+            const pct = total > 0 ? Math.round((completed / total) * 100) : 0;
+            
+            document.getElementById('global-progress-bar').style.width = pct + '%';
+            document.getElementById('global-progress-text').textContent = pct + '%';
+            document.getElementById('global-progress-detail').textContent = `${completed} de ${total} tarefas concluídas`;
+            
+            // Week number
+            const startDate = new Date('2024-01-01'); // Adjust as needed
+            const now = new Date();
+            const weekNum = Math.ceil(((now - startDate) / (1000 * 60 * 60 * 24 * 7)) % 52) || 1;
+            document.getElementById('current-week-num').textContent = weekNum;
+            
+            // Phase text
+            const phase = detectCurrentPhase();
+            const phaseInfo = getPhaseInfo(phase);
+            document.getElementById('global-phase-text').textContent = phaseInfo.icon + ' ' + phaseInfo.text;
+        }
+        
+        function updateNextAction() {
+            try {
+                const today = new Date();
+                const dayNames = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+                const todayKey = dayNames[today.getDay()];
+                
+                // Find first undone weekly task for today
+                const todayItem = document.querySelector(`#weekly-checklist li[data-day="${todayKey}"]`);
+                const todayDone = todayItem ? todayItem.classList.contains('done') : false;
+                
+                // Find first undone phase task
+                let nextPhaseTask = null;
+                let nextPhaseName = '';
+                const phase = detectCurrentPhase();
+                if (phase === 'early') {
+                    nextPhaseTask = document.querySelector('#checklist-early li:not(.done)');
+                    nextPhaseName = 'Early Game';
+                } else if (phase === 'mid') {
+                    nextPhaseTask = document.querySelector('#checklist-mid li:not(.done)');
+                    nextPhaseName = 'Mid Game';
+                } else if (phase === 'end') {
+                    nextPhaseTask = document.querySelector('#checklist-end li:not(.done)');
+                    nextPhaseName = 'End Game';
+                }
+                
+                const titleEl = document.getElementById('next-action-title');
+                const descEl = document.getElementById('next-action-desc');
+                const buttonsEl = document.getElementById('next-action-buttons');
+                
+                // If main elements don't exist yet, try to initialize them
+                if (!titleEl || !descEl || !buttonsEl) {
+                    // Create fallback content if elements missing
+                    if (titleEl) titleEl.textContent = '📅 Próxima Ação';
+                    if (descEl) descEl.textContent = 'Selecionando tarefa...';
+                    if (buttonsEl) buttonsEl.innerHTML = '';
+                    return;
+                }
+                
+                // Show today's task if it exists and isn't done
+                if (todayItem && !todayDone) {
+                    titleEl.textContent = `📅 Hoje (${getDayName(todayKey)}): ${todayItem.textContent.trim()}`;
+                    descEl.textContent = 'Complete a tarefa diária do plano semanal para manter o streak.';
+                    buttonsEl.innerHTML = `
+                        <button class="btn btn-primary" onclick="switchTab('weekly')">📅 Ir para Plano Semanal</button>
+                        <button class="btn btn-secondary" onclick="switchTab('tools')">🛠️ Abrir Ferramentas</button>
+                    `;
+                } else if (nextPhaseTask) {
+                    // Show next phase task
+                    titleEl.textContent = `🎮 ${nextPhaseName}: ${nextPhaseTask.textContent.trim()}`;
+                    descEl.textContent = 'Próximo passo na sua progressão RPG. Complete para avançar de fase.';
+                    buttonsEl.innerHTML = `
+                        <button class="btn btn-primary" onclick="switchTab('rpg')">🎮 Ir para Progressão RPG</button>
+                        <button class="btn btn-secondary" onclick="switchTab('audio')">🎵 Kit de Áudios</button>
+                    `;
+                } else if (todayItem && todayDone) {
+                    // Today's task is done, show progress message
+                    titleEl.textContent = '✅ Tarefa de Hoje Concluída!';
+                    descEl.textContent = 'Maravilha! Complete a tarefa de ontem para manter o streak ativo.';
+                    buttonsEl.innerHTML = `
+                        <button class="btn btn-primary" onclick="switchTab('weekly')">📅 Ver Próxima Semana</button>
+                        <button class="btn btn-secondary" onclick="switchTab('rpg')">🎮 Progressão RPG</button>
+                    `;
+                } else {
+                    // Show "Tudo em dia" status
+                    titleEl.textContent = '🎉 Tudo em dia!';
+                    descEl.textContent = 'Você completou todas as tarefas disponíveis. Considere testar um Gate ou planejar a próxima semana.';
+                    buttonsEl.innerHTML = `
+                        <button class="btn btn-primary" onclick="switchTab('rpg')">🧪 Testar Gate</button>
+                        <button class="btn btn-secondary" onclick="switchTab('weekly')">📅 Planejar Próxima Semana</button>
+                    `;
+                }
+            } catch (e) {
+                console.warn('updateNextAction error:', e);
+                // Show fallback error state
+                const titleEl = document.getElementById('next-action-title');
+                const descEl = document.getElementById('next-action-desc');
+                const buttonsEl = document.getElementById('next-action-buttons');
+                if (titleEl && descEl && buttonsEl) {
+                    titleEl.textContent = '⚠️ Erro';
+                    descEl.textContent = 'Tente recarregar a página';
+                    buttonsEl.innerHTML = `
+                        <button class="btn btn-primary" onclick="window.location.reload()">🔄 Recarregar</button>
+                    `;
+                }
+            }
+        }
+        
+        function getDayName(key) {
+            const names = { mon: 'Segunda', tue: 'Terça', wed: 'Quarta', thu: 'Quinta', fri: 'Sexta', sat: 'Sábado', sun: 'Domingo' };
+            return names[key] || key;
+        }
+        
+        function updateAreaStatus() {
+            const areas = [
+                { id: 'listening', label: '🎧 Listening', key: 'listening', color: '#667eea', metric: 'metric-listening', weeklyKey: 'listening' },
+                { id: 'speaking', label: '🗣️ Speaking', key: 'speaking', color: '#28a745', metric: 'metric-speaking', weeklyKey: 'speaking' },
+                { id: 'grammar', label: '📝 Gramática', key: 'grammar', color: '#fd7e14', metric: null, weeklyKey: null },
+                { id: 'vocab', label: '📚 Vocabulário', key: 'vocab', color: '#6f42c1', metric: 'metric-anki', weeklyKey: 'anki' },
+                { id: 'writing', label: '✍️ Writing', key: 'writing', color: '#e83e8c', metric: 'metric-writing', weeklyKey: 'writing' }
+            ];
+            
+            const grid = document.getElementById('area-status-grid');
+            if (!grid) return;
+            
+            // Get latest metrics
+            const metricsHistory = JSON.parse(safeGetItem('metrics-history') || '[]');
+            const latest = metricsHistory[0] || {};
+            
+            // Get phase progress
+            const earlyPct = getPhasePercent('early');
+            const midPct = getPhasePercent('mid');
+            const endPct = getPhasePercent('end');
+            
+            grid.innerHTML = areas.map(area => {
+                let progress = 0;
+                let detail = '';
+                
+                if (area.metric && latest[area.weeklyKey]) {
+                    // Weekly progress based on goals
+                    const goals = { listening: 300, speaking: 180, anki: 100, writing: 8 };
+                    const goal = goals[area.weeklyKey] || 1;
+                    progress = Math.min(100, Math.round((parseInt(latest[area.weeklyKey]) / goal) * 100));
+                    detail = `${latest[area.weeklyKey]} / ${goal} ${area.weeklyKey === 'anki' ? 'cards' : area.weeklyKey === 'writing' ? 'textos' : 'min'}`;
+                } else if (area.id === 'grammar') {
+                    // Grammar based on phase progress
+                    const phase = detectCurrentPhase();
+                    if (phase === 'early') progress = earlyPct;
+                    else if (phase === 'mid') progress = midPct;
+                    else if (phase === 'end') progress = endPct;
+                    else progress = 100;
+                    detail = `${phase === 'early' ? 'Early' : phase === 'mid' ? 'Mid' : phase === 'end' ? 'End' : 'Master'} Game`;
+                }
+                
+                return `
+                    <div class="card" style="border-left: 4px solid ${area.color};">
+                        <h3>${area.label}</h3>
+                        <div class="progress-bar" style="margin: 12px 0; height: 10px;">
+                            <div class="progress-fill" style="width: ${progress}%; background: ${area.color};"></div>
+                        </div>
+                        <div style="font-size: 1.5rem; font-weight: 700; color: ${area.color};">${progress}%</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">${detail}</div>
+                        <button class="btn btn-secondary" style="margin-top: 12px; width: 100%;" onclick="switchTab('${getTabForArea(area.id)}')">
+                            📊 Ver Detalhes
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function getPhasePercent(phase) {
+            const items = document.querySelectorAll(`#checklist-${phase} li`);
+            if (items.length === 0) return 0;
+            let done = 0;
+            items.forEach(item => { if (item.classList.contains('done')) done++; });
+            return Math.round((done / items.length) * 100);
+        }
+        
+        function getTabForArea(area) {
+            const map = { listening: 'weekly', speaking: 'rpg', grammar: 'rpg', vocab: 'weekly', writing: 'prompts' };
+            return map[area] || 'dashboard';
+        }
+        
+        function updateWeekQuickStats() {
+            const metricsHistory = JSON.parse(safeGetItem('metrics-history') || '[]');
+            const latest = metricsHistory[0] || {};
+            
+            document.getElementById('stat-week-listening').textContent = latest.listening || 0;
+            document.getElementById('stat-week-speaking').textContent = latest.speaking || 0;
+            document.getElementById('stat-week-anki').textContent = latest.anki || 0;
+            document.getElementById('stat-week-writing').textContent = latest.writing || 0;
+        }
+        
+        function updateUpcomingGates() {
+            const phase = detectCurrentPhase();
+            const container = document.getElementById('upcoming-gates');
+            
+            let gates = [];
+            if (phase === 'early') {
+                gates = [
+                    { name: 'Early→Mid: Listening 70%', desc: '6 Minute English sem legenda + Ditado ≤3 erros', ready: checkGateReady('early-mid-listening') },
+                    { name: 'Early→Mid: Pronúncia Core', desc: 'TH, R, vogais, connected speech reconhecíveis', ready: checkGateReady('early-mid-pronunciation') }
+                ];
+            } else if (phase === 'mid') {
+                gates = [
+                    { name: 'Mid→End: Shadowing 2min', desc: 'Áudios 3-8 a 1.0x fluido ≤3 travamentos', ready: checkGateReady('mid-end-shadowing') },
+                    { name: 'Mid→End: Conversa IA 10min', desc: 'Flui sem travar >3x/min + Autoavaliação ≥7/10', ready: checkGateReady('mid-end-conversation') }
+                ];
+            } else if (phase === 'end') {
+                gates = [
+                    { name: 'End Game: Simulação', desc: 'Entrevista/Apresentação nota ≥8/10', ready: checkGateReady('end-simulation') },
+                    { name: 'End Game: Consumo Nativo', desc: 'Série/filme só legenda EN 85%+ compreensão', ready: false }
+                ];
+            } else {
+                gates = [{ name: '🌟 Mastery Mantido', desc: 'Anki + Shadowing + Conversa semanal', ready: true }];
+            }
+            
+            container.innerHTML = gates.map(gate => `
+                <div style="display: flex; align-items: center; gap: 12px; padding: 10px; background: var(--bg-secondary); border-radius: 8px; border: 1px solid var(--border-color);">
+                    <span style="font-size: 1.5rem;">${gate.ready ? '✅' : '🔒'}</span>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600;">${gate.name}</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">${gate.desc}</div>
+                    </div>
+                    <button class="btn btn-${gate.ready ? 'primary' : 'secondary'}" style="font-size: 0.75rem; padding: 6px 12px;" onclick="switchTab('rpg')">
+                        ${gate.ready ? 'Testar' : 'Preparar'}
+                    </button>
+                </div>
+            `).join('');
+        }
+        
+        function checkGateReady(gateType) {
+            // Simple heuristic based on phase progress
+            const phase = detectCurrentPhase();
+            if (phase === 'early' && gateType.startsWith('early-mid')) return getPhasePercent('early') >= 80;
+            if (phase === 'mid' && gateType.startsWith('mid-end')) return getPhasePercent('mid') >= 80;
+            if (phase === 'end' && gateType.startsWith('end')) return getPhasePercent('end') >= 80;
+            return false;
+        }
+        
+        function updateActiveAlertsList() {
+            const alerts = [];
+            const today = new Date();
+            const dayMap = {0: 'sun', 1: 'mon', 2: 'tue', 3: 'wed', 4: 'thu', 5: 'fri', 6: 'sat'};
+            
+            // Streak risk
+            const streak = calculateStreak();
+            const yesterdayKey = dayMap[(today.getDay() + 6) % 7];
+            if (streak > 0 && safeGetItem('checklist-' + yesterdayKey) !== 'true') {
+                alerts.push({ icon: '🔥', text: `Streak de ${streak} dias em risco! Complete a tarefa de ${getDayName(yesterdayKey)}.`, type: 'warning' });
+            }
+            
+            // DeepL quota
+            const metricsHistory = JSON.parse(safeGetItem('metrics-history') || '[]');
+            if (metricsHistory.length > 0) {
+                const recentWriting = parseInt(metricsHistory[0].writing) || 0;
+                if (recentWriting > 3) {
+                    alerts.push({ icon: '🌐', text: 'Cota DeepL (~5k chars) pode estar acabando. Use Google Translate.', type: 'info' });
+                }
+            }
+            
+            // Speaking
+            if (metricsHistory.length > 0) {
+                const recentSpeaking = parseInt(metricsHistory[0].speaking) || 0;
+                if (recentSpeaking < 15) {
+                    alerts.push({ icon: '🗣️', text: `Pouco speaking esta semana (${recentSpeaking} min). Meta: 15+ min.`, type: 'warning' });
+                }
+            }
+            
+            // Gate readiness
+            const phase = detectCurrentPhase();
+            if (phase === 'early' && getPhasePercent('early') >= 80) {
+                alerts.push({ icon: '🎯', text: 'Gate Early→Mid pronto para testar!', type: 'success' });
+            } else if (phase === 'mid' && getPhasePercent('mid') >= 80) {
+                alerts.push({ icon: '🎯', text: 'Gate Mid→End pronto para testar!', type: 'success' });
+            }
+            
+            const container = document.getElementById('active-alerts-list');
+            if (alerts.length === 0) {
+                container.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--text-muted);">✅ Nenhum alerta ativo. Tudo nos conformes!</div>';
+            } else {
+                container.innerHTML = alerts.map(a => `
+                    <div style="display: flex; align-items: center; gap: 10px; padding: 10px; background: var(--bg-secondary); border-radius: 8px; border-left: 3px solid ${a.type === 'warning' ? '#ffc107' : a.type === 'success' ? '#28a745' : '#17a2b8'};">
+                        <span style="font-size: 1.2rem;">${a.icon}</span>
+                        <span style="flex: 1; font-size: 0.9rem;">${a.text}</span>
+                    </div>
+                `).join('');
+            }
+        }
+        
+        // Unified Log / Gallery
+        function loadUnifiedLog() {
+            const container = document.getElementById('unified-log-container');
+            if (!container) return;
+            
+            const allEntries = [];
+            
+            // Checklist entries
+            ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'].forEach(day => {
+                const saved = safeGetItem('checklist-' + day);
+                if (saved === 'true') {
+                    allEntries.push({
+                        type: 'checklist',
+                        date: getDateForDay(day),
+                        title: `✅ Checklist: ${getDayName(day)}`,
+                        detail: 'Tarefas diárias concluídas',
+                        status: 'completed'
+                    });
+                }
+            });
+            
+            // Metrics entries
+            const metricsHistory = JSON.parse(safeGetItem('metrics-history') || '[]');
+            metricsHistory.forEach(m => {
+                allEntries.push({
+                    type: 'metrics',
+                    date: m.date,
+                    title: '📊 Métricas Semanais',
+                    detail: `Anki: ${m.anki} | Listening: ${m.listening}min | Speaking: ${m.speaking}min | Writing: ${m.writing} | Quiz: ${m.quiz}%`,
+                    status: 'completed'
+                });
+            });
+            
+            // Gate log entries
+            const gateHistory = JSON.parse(safeGetItem('gate-log-history') || '[]');
+            gateHistory.forEach(g => {
+                allEntries.push({
+                    type: 'gate',
+                    date: g.date,
+                    title: `🧪 Gate Test: ${getGateLabel(g.gate)}`,
+                    detail: `Resultado: ${g.result.toUpperCase()} | ${g.detail || 'Sem detalhes'}`,
+                    status: g.result
+                });
+            });
+            
+            // Self assessment entries
+            const selfHistory = JSON.parse(safeGetItem('self-assessment-history') || '[]');
+            selfHistory.forEach(s => {
+                allEntries.push({
+                    type: 'self-assessment',
+                    date: s.date,
+                    title: '📝 Autoavaliação Mensal',
+                    detail: `Listen: ${s.listen}/10 | Speak: ${s.speak}/10 | Write: ${s.write}/10 | Grammar: ${s.grammar}/10`,
+                    status: 'completed'
+                });
+            });
+            
+            // Phase change entries (simplified)
+            ['early', 'mid', 'end'].forEach(phase => {
+                const items = document.querySelectorAll(`#checklist-${phase} li.done`);
+                if (items.length > 0) {
+                    allEntries.push({
+                        type: 'phase',
+                        date: new Date().toISOString().split('T')[0],
+                        title: `🎮 Fase ${phase.charAt(0).toUpperCase() + phase.slice(1)} Game`,
+                        detail: `${items.length}/5 critérios atendidos`,
+                        status: items.length === 5 ? 'completed' : 'partial'
+                    });
+                }
+            });
+            
+            // Sort by date descending
+            allEntries.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            // Apply filters
+            const typeFilter = document.getElementById('log-filter-type')?.value || 'all';
+            const periodFilter = document.getElementById('log-filter-period')?.value || 'all';
+            const statusFilter = document.getElementById('log-filter-status')?.value || 'all';
+            
+            let filtered = allEntries.filter(entry => {
+                if (typeFilter !== 'all' && entry.type !== typeFilter) return false;
+                if (statusFilter !== 'all' && entry.status !== statusFilter) return false;
+                if (periodFilter !== 'all') {
+                    const entryDate = new Date(entry.date);
+                    const now = new Date();
+                    if (periodFilter === 'week') {
+                        const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+                        if (entryDate < weekAgo) return false;
+                    } else if (periodFilter === 'month') {
+                        const monthAgo = new Date(now.getFullYear(), now.getMonth(), 1);
+                        if (entryDate < monthAgo) return false;
+                    } else if (periodFilter === 'last-month') {
+                        const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+                        const lastMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0);
+                        if (entryDate < lastMonthStart || entryDate > lastMonthEnd) return false;
+                    }
+                }
+                return true;
+            });
+            
+            if (filtered.length === 0) {
+                container.innerHTML = '<div style="text-align: center; padding: 40px; color: var(--text-muted);"><div style="font-size: 3rem; margin-bottom: 16px;">📭</div><p>Nenhum registro encontrado com os filtros atuais.</p></div>';
+                document.getElementById('log-summary-card').style.display = 'none';
+                return;
+            }
+            
+            container.innerHTML = filtered.map(entry => `
+                <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 16px; margin-bottom: 12px; border-left: 4px solid ${getStatusColor(entry.status)};">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                        <div>
+                            <div style="font-weight: 600; font-size: 1rem;">${entry.title}</div>
+                            <div style="font-size: 0.85rem; color: var(--text-muted);">📅 ${formatDate(entry.date)}</div>
+                        </div>
+                        <span style="background: ${getStatusColor(entry.status)}; color: white; padding: 2px 10px; border-radius: 12px; font-size: 0.7rem; font-weight: 600; text-transform: uppercase;">${entry.status}</span>
+                    </div>
+                    <div style="color: var(--text-secondary); font-size: 0.9rem;">${entry.detail}</div>
+                </div>
+            `).join('');
+            
+            // Update summary
+            updateLogSummary(filtered);
+        }
+        
+        function getStatusColor(status) {
+            const colors = { completed: '#28a745', partial: '#ffc107', pending: '#6c757d', pass: '#28a745', fail: '#dc3545' };
+            return colors[status] || '#6c757d';
+        }
+        
+        function getGateLabel(gate) {
+            const labels = {
+                'early-mid-listening': 'Early→Mid: Listening/Ditado',
+                'early-mid-pronunciation': 'Early→Mid: Pronúncia',
+                'mid-end-shadowing': 'Mid→End: Shadowing',
+                'mid-end-conversation': 'Mid→End: Conversa IA',
+                'end-simulation': 'End Game: Simulação',
+                'other': 'Outro'
+            };
+            return labels[gate] || gate;
+        }
+        
+        function formatDate(dateStr) {
+            const d = new Date(dateStr);
+            return d.toLocaleDateString('pt-BR', { weekday: 'short', day: '2-digit', month: '2-digit', year: 'numeric' });
+        }
+        
+        function getDateForDay(dayKey) {
+            // Returns the most recent date for this day of week
+            const dayMap = { sun: 0, mon: 1, tue: 2, wed: 3, thu: 4, fri: 5, sat: 6 };
+            const targetDay = dayMap[dayKey];
+            const today = new Date();
+            const todayDay = today.getDay();
+            let diff = todayDay - targetDay;
+            if (diff < 0) diff += 7;
+            const date = new Date(today);
+            date.setDate(today.getDate() - diff);
+            return date.toISOString().split('T')[0];
+        }
+        
+        function applyLogFilters() {
+            loadUnifiedLog();
+        }
+        
+        function updateLogSummary(entries) {
+            const summaryCard = document.getElementById('log-summary-card');
+            const grid = document.getElementById('log-summary-grid');
+            
+            const counts = { completed: 0, partial: 0, pending: 0 };
+            const types = {};
+            
+            entries.forEach(e => {
+                counts[e.status] = (counts[e.status] || 0) + 1;
+                types[e.type] = (types[e.type] || 0) + 1;
+            });
+            
+            grid.innerHTML = `
+                <div class="card" style="text-align: center;">
+                    <div style="font-size: 2rem; font-weight: 700; color: #28a745;">${counts.completed || 0}</div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted);">Concluídos</div>
+                </div>
+                <div class="card" style="text-align: center;">
+                    <div style="font-size: 2rem; font-weight: 700; color: #ffc107;">${counts.partial || 0}</div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted);">Parciais</div>
+                </div>
+                <div class="card" style="text-align: center;">
+                    <div style="font-size: 2rem; font-weight: 700; color: #6c757d;">${counts.pending || 0}</div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted);">Pendentes</div>
+                </div>
+                <div class="card" style="text-align: center;">
+                    <div style="font-size: 2rem; font-weight: 700; color: #667eea;">${entries.length}</div>
+                    <div style="font-size: 0.8rem; color: var(--text-muted);">Total</div>
+                </div>
+            `;
+            
+            summaryCard.style.display = 'block';
+        }
+        
+        function exportLogReport() {
+            // Generate markdown report
+            const typeFilter = document.getElementById('log-filter-type')?.value || 'all';
+            const periodFilter = document.getElementById('log-filter-period')?.value || 'all';
+            const statusFilter = document.getElementById('log-filter-status')?.value || 'all';
+            
+            // Collect all entries (same logic as loadUnifiedLog)
+            const allEntries = [];
+            ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'].forEach(day => {
+                if (safeGetItem('checklist-' + day) === 'true') {
+                    allEntries.push({ type: 'checklist', date: getDateForDay(day), title: `Checklist: ${getDayName(day)}`, detail: 'Tarefas diárias', status: 'completed' });
+                }
+            });
+            const metricsHistory = JSON.parse(safeGetItem('metrics-history') || '[]');
+            metricsHistory.forEach(m => allEntries.push({ type: 'metrics', date: m.date, title: 'Métricas', detail: `Anki: ${m.anki} | Listening: ${m.listening}min | Speaking: ${m.speaking}min | Writing: ${m.writing} | Quiz: ${m.quiz}%`, status: 'completed' }));
+            const gateHistory = JSON.parse(safeGetItem('gate-log-history') || '[]');
+            gateHistory.forEach(g => allEntries.push({ type: 'gate', date: g.date, title: `Gate: ${getGateLabel(g.gate)}`, detail: `${g.result.toUpperCase()} | ${g.detail || ''}`, status: g.result }));
+            const selfHistory = JSON.parse(safeGetItem('self-assessment-history') || '[]');
+            selfHistory.forEach(s => allEntries.push({ type: 'self-assessment', date: s.date, title: 'Autoavaliação', detail: `L:${s.listen} S:${s.speak} W:${s.write} G:${s.grammar}`, status: 'completed' }));
+            
+            allEntries.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            // Apply filters
+            let filtered = allEntries.filter(entry => {
+                if (typeFilter !== 'all' && entry.type !== typeFilter) return false;
+                if (statusFilter !== 'all' && entry.status !== statusFilter) return false;
+                if (periodFilter !== 'all') {
+                    const entryDate = new Date(entry.date);
+                    const now = new Date();
+                    if (periodFilter === 'week') {
+                        const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+                        if (entryDate < weekAgo) return false;
+                    } else if (periodFilter === 'month') {
+                        const monthAgo = new Date(now.getFullYear(), now.getMonth(), 1);
+                        if (entryDate < monthAgo) return false;
+                    } else if (periodFilter === 'last-month') {
+                        const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+                        const lastMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0);
+                        if (entryDate < lastMonthStart || entryDate > lastMonthEnd) return false;
+                    }
+                }
+                return true;
+            });
+            
+            // Generate markdown
+            const reportNow = new Date();
+            const reportDate = reportNow.toLocaleDateString('pt-BR');
+            const reportTime = reportNow.toLocaleTimeString('pt-BR');
+            
+            let md = `# 📜 Relatório de Progresso - English Study Hub\n\n`;
+            md += `**Gerado em:** ${reportDate} às ${reportTime}\n`;
+            md += `**Filtros:** Tipo: ${typeFilter} | Período: ${periodFilter} | Status: ${statusFilter}\n`;
+            md += `**Total de entradas:** ${filtered.length}\n\n`;
+            md += `---\n\n`;
+            
+            // Group by date
+            const byDate = {};
+            filtered.forEach(e => {
+                if (!byDate[e.date]) byDate[e.date] = [];
+                byDate[e.date].push(e);
+            });
+            
+            Object.keys(byDate).sort().reverse().forEach(date => {
+                md += `## 📅 ${formatDate(date)}\n\n`;
+                byDate[date].forEach(e => {
+                    const statusIcon = e.status === 'completed' ? '✅' : e.status === 'partial' ? '⚠️' : '⏳';
+                    md += `- ${statusIcon} **${e.title}**: ${e.detail}\n`;
+                });
+                md += `\n`;
+            });
+            
+            md += `-----\n\n*Relatório gerado automaticamente pelo English Study Hub*`;
+            
+            // Create blob and download
+            const blob = new Blob([md], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            
+            // Generate filename: english-study 1.md, english-study 2.md, etc.
+            let reportCounter = parseInt(safeGetItem('report-counter') || '0') + 1;
+            safeSetItem('report-counter', reportCounter.toString());
+            
+            const fileNow = new Date();
+            const dateStr = fileNow.toLocaleDateString('pt-BR').replace(/\//g, '-'); // DD-MM-YYYY
+            const timeStr = fileNow.toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'}).replace(':', 'h'); // HHhMM
+            const fileName = `english-study ${reportCounter} (${dateStr} ${timeStr}).md`;
+            
+            a.download = fileName;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            // Also offer to open in new tab for PDF print
+            setTimeout(() => {
+                if (confirm('Relatório .md baixado! Quer abrir no navegador para imprimir como PDF?')) {
+                    const printWindow = window.open('', '_blank');
+                    printWindow.document.write(`
+                        <!DOCTYPE html>
+                        <html>
+                        <head>
+                            <title>Relatório English Study Hub</title>
+                            <style>
+                                body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 40px 20px; line-height: 1.6; }
+                                h1 { color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 10px; }
+                                h2 { color: #333; margin-top: 30px; }
+                                pre { background: #f8f9fa; padding: 15px; border-radius: 8px; overflow-x: auto; }
+                                .meta { color: #666; font-size: 0.9rem; margin-bottom: 20px; }
+                                @media print { body { padding: 0; } .no-print { display: none; } }
+                            </style>
+                        </head>
+                        <body>
+                            <h1>📜 Relatório de Progresso</h1>
+                            <div class="meta">Gerado em ${reportDate} às ${reportTime} | Filtros: ${typeFilter}/${periodFilter}/${statusFilter} | ${filtered.length} entradas</div>
+                            <pre>${md.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>
+                            <div class="no-print" style="margin-top: 30px; text-align: center;">
+                                <button onclick="window.print()" style="padding: 12px 24px; background: #667eea; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 1rem;">🖨️ Imprimir / Salvar como PDF</button>
+                            </div>
+                        </body>
+                        </html>
+                    `);
+                    printWindow.document.close();
+                }
+            }, 100);
+        }
+        
+        // ===== REPORTS FOLDER & MARKDOWN VIEWER =====
+        
+        function openReportsFolder() {
+            // Get the directory of the current HTML file
+            const currentUrl = window.location.href;
+            const folderPath = 'file:///' + currentUrl.substring(0, currentUrl.lastIndexOf('/') + 1) + 'reports/';
+            const newWindow = window.open(folderPath, '_blank');
+            
+            // Fallback: copy path to clipboard
+            setTimeout(() => {
+                if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
+                    // Extract path from file:// URL
+                    const absPath = decodeURIComponent(currentUrl.replace('file:///', '').replace('english-study-hub.html', 'reports').replace(/\//g, '\\'));
+                    navigator.clipboard.writeText(absPath).then(() => {
+                        alert('📋 Caminho copiado!\n\nPressione <kbd>Win+R</kbd> → Cole (<kbd>Ctrl+V</kbd>) → Enter\n\n' + absPath);
+                    });
+                }
+            }, 500);
+        }
+        
+        function initMdDropZone() {
+            const dropZone = document.getElementById('md-drop-zone');
+            const fileInput = document.getElementById('md-file-input');
+            
+            if (!dropZone || !fileInput) return;
+            
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, preventDefaults, false);
+                document.body.addEventListener(eventName, preventDefaults, false);
+            });
+            
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropZone.addEventListener(eventName, () => {
+                    dropZone.style.borderColor = 'var(--accent-primary)';
+                    dropZone.style.background = 'rgba(102, 126, 234, 0.1)';
+                }, false);
+            });
+            
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, () => {
+                    dropZone.style.borderColor = 'var(--border-color)';
+                    dropZone.style.background = 'var(--bg-secondary)';
+                }, false);
+            });
+            
+            dropZone.addEventListener('drop', handleMdDrop, false);
+            dropZone.addEventListener('click', () => fileInput.click());
+            fileInput.addEventListener('change', (e) => handleMdFiles(e.target.files));
+        }
+        
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        
+        function handleMdDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            handleMdFiles(files);
+        }
+        
+        function handleMdFiles(files) {
+            if (!files.length) return;
+            
+            for (const file of files) {
+                if (file.name.endsWith('.md') || file.name.endsWith('.markdown')) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        renderMarkdown(e.target.result, file.name);
+                    };
+                    reader.readAsText(file);
+                    break; // Only first .md file
+                }
+            }
+        }
+        
+        function renderMarkdown(mdText, fileName) {
+            // Simple markdown to HTML converter
+            let html = mdText
+                // Headers
+                .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+                .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+                .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+                // Bold/Italic
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/`(.*?)`/g, '<code>$1</code>')
+                // Code blocks
+                .replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>')
+                // Links
+                .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>')
+                // Lists
+                .replace(/^\- (.*$)/gim, '<li>$1</li>')
+                .replace(/^\d+\. (.*$)/gim, '<li>$1</li>')
+                // Horizontal rule
+                .replace(/^---$/gim, '<hr>')
+                // Paragraphs (simple)
+                .replace(/^(?!<[hulp]|<pre|<hr)(.+)$/gim, '<p>$1</p>')
+                // Fix list wrapping
+                .replace(/(<li>.*<\/li>)/gim, '<ul>$1</ul>')
+                .replace(/<\/ul>\s*<ul>/g, '');
+            
+            document.getElementById('md-content').innerHTML = html;
+            document.getElementById('md-viewer').style.display = 'block';
+            document.getElementById('md-viewer').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function closeMdViewer() {
+            document.getElementById('md-viewer').style.display = 'none';
+        }
+        
+        // Initialize drop zone when logs tab is shown
+        const originalLogsTabClick = document.querySelector('.nav-tab[data-tab="logs"]')?.onclick;
+        document.querySelector('.nav-tab[data-tab="logs"]')?.addEventListener('click', () => {
+            setTimeout(initMdDropZone, 100);
+        });
+
+        console.log('🏁 English Study Hub: Script fully loaded and initialized');
+
+        </script>
+</body>
+</html>

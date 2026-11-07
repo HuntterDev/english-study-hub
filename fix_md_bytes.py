@@ -1,0 +1,22 @@
+with open(r'C:\Users\Douglas_Desktop\Pictures\DEEPSEEK PROJETOS\Learning English\english-study-hub.html', 'rb') as f:
+    content = f.read()
+
+# Replace literal < with HTML entity < in the replacement strings
+# The pattern is: ', '<')  ->  ', '<')
+# '<' is bytes: 0x27 0x3C 0x27 0x29
+# '<' is bytes: 0x27 0x26 0x6C 0x74 0x3B 0x27 0x29
+old1 = bytes([0x27, 0x3C, 0x27, 0x29])
+new1 = bytes([0x27, 0x26, 0x6C, 0x74, 0x3B, 0x27, 0x29])
+content = content.replace(old1, new1)
+
+# Same for >
+# '>') is bytes: 0x27 0x3E 0x27 0x29
+# '>') is bytes: 0x27 0x26, 0x67, 0x74, 0x3B, 0x27, 0x29
+old2 = bytes([0x27, 0x3E, 0x27, 0x29])
+new2 = bytes([0x27, 0x26, 0x67, 0x74, 0x3B, 0x27, 0x29])
+content = content.replace(old2, new2)
+
+with open(r'C:\Users\Douglas_Desktop\Pictures\DEEPSEEK PROJETOS\Learning English\english-study-hub.html', 'wb') as f:
+    f.write(content)
+
+print('Done')
